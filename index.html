@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ঝালকাঠি পৌরসভা: কৌশলগত পুনর্গঠন ও উন্নয়ন রূপরেখা</title>
+    <title>Jhalakathi Paurashava: Strategic Reconstruction Framework</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,538 +11,606 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Google Fonts: Hind Siliguri for Bangla -->
+    <!-- Font: Hind Siliguri for Professional Bangla -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Placeholder Comments -->
-    <!-- Application Structure:
-         1. Overview: High-level 'White Paper' summary.
-         2. About Jhalakathi: History, Demographics (Literacy/Density), Geography.
-         3. Financial Architecture: Deep dive into the 154.87 Cr Budget, Pass-through entity analysis.
-         4. Strategic Plan: 4-Pillar Revamp (Finance, Blue-Green Infra, Governance, Capacity).
-         5. Simulator: Revenue modeling based on GIS tax assessment.
-         6. Sources: Full bibliography.
-    -->
-
     <style>
         body {
             font-family: 'Hind Siliguri', sans-serif;
-            background-color: #F8FAFC;
-            color: #1E293B;
+            background-color: #F1F5F9; /* Slate 100 */
+            color: #0F172A; /* Slate 900 */
         }
 
         .chart-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 250px; /* Mobile default */
         }
-
+        
         @media (min-width: 1024px) {
             .chart-container {
-                height: 350px;
+                height: 350px; /* Desktop */
             }
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        .nav-active {
-            border-bottom: 3px solid #059669;
-            color: #059669;
-            font-weight: 700;
-            background-color: #ECFDF5;
-        }
-
-        .pillar-card {
-            transition: all 0.3s ease;
-        }
-        .pillar-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        
+        /* Range Slider */
         input[type=range] { -webkit-appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
-            background: #059669; cursor: pointer; margin-top: -7px;
+            -webkit-appearance: none;
+            height: 20px; width: 20px;
+            border-radius: 50%;
+            background: #0D9488; /* Teal 600 */
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 4px; cursor: pointer; background: #E2E8F0; border-radius: 2px;
+            width: 100%; height: 4px;
+            cursor: pointer;
+            background: #E2E8F0;
+            border-radius: 2px;
+        }
+
+        .nav-item.active {
+            background-color: #0F766E; /* Teal 700 */
+            color: white;
+            border-left: 4px solid #F59E0B; /* Amber 500 */
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body class="flex flex-col lg:flex-row min-h-screen bg-slate-50">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 bg-emerald-700 rounded-lg flex items-center justify-center text-white text-2xl shadow-md">🏛️</div>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-slate-800 leading-none">ঝালকাঠি পৌরসভা</h1>
-                        <p class="text-xs md:text-sm text-emerald-600 font-semibold mt-1">কৌশলগত পুনর্গঠন ও উন্নয়ন রূপরেখা (White Paper)</p>
-                    </div>
-                </div>
-                <!-- Desktop Nav -->
-                <nav class="hidden lg:flex space-x-1">
-                    <button onclick="nav('overview')" id="btn-overview" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700 nav-active">একনজরে</button>
-                    <button onclick="nav('about')" id="btn-about" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700">পরিচিতি</button>
-                    <button onclick="nav('finance')" id="btn-finance" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700">আর্থিক কাঠামো</button>
-                    <button onclick="nav('plan')" id="btn-plan" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700">৪-স্তম্ভ পরিকল্পনা</button>
-                    <button onclick="nav('sim')" id="btn-sim" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700">সিমুলেটর</button>
-                    <button onclick="nav('sources')" id="btn-sources" class="px-4 py-2 rounded-t-lg text-sm font-medium text-slate-600 hover:text-emerald-700">তথ্যসূত্র</button>
-                </nav>
-            </div>
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <div>
+            <h1 class="font-bold text-lg">ঝালকাঠি পৌরসভা</h1>
+            <p class="text-xs text-teal-400">Strategic Dashboard</p>
         </div>
-        <!-- Mobile Scroll Nav -->
-        <div class="lg:hidden bg-slate-50 border-t border-slate-200 overflow-x-auto whitespace-nowrap px-4 py-2">
-            <div class="flex space-x-4">
-                <button onclick="nav('overview')" class="text-sm font-bold text-slate-600">একনজরে</button>
-                <button onclick="nav('about')" class="text-sm font-bold text-slate-600">পরিচিতি</button>
-                <button onclick="nav('finance')" class="text-sm font-bold text-slate-600">অর্থনীতি</button>
-                <button onclick="nav('plan')" class="text-sm font-bold text-slate-600">পরিকল্পনা</button>
-                <button onclick="nav('sim')" class="text-sm font-bold text-slate-600">সিমুলেটর</button>
-                <button onclick="nav('sources')" class="text-sm font-bold text-slate-600">উৎস</button>
-            </div>
+        <button id="mobile-menu-btn" class="text-white p-2 focus:outline-none border border-slate-700 rounded">
+            ☰ মেনু
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="hidden lg:flex bg-slate-900 text-slate-300 w-full lg:w-64 flex-shrink-0 flex-col shadow-xl z-40 lg:h-screen lg:sticky lg:top-0 transition-all duration-300 ease-in-out">
+        <div class="hidden lg:block p-6 bg-slate-950 border-b border-slate-800">
+            <h1 class="text-xl font-bold text-white tracking-tight">ঝালকাঠি পৌরসভা</h1>
+            <p class="text-xs text-teal-500 font-medium mt-1 uppercase tracking-wider">Strategic Framework</p>
         </div>
-    </header>
+        
+        <nav class="flex-grow py-4 lg:py-6 space-y-1 overflow-y-auto">
+            <button onclick="switchTab('overview')" id="btn-overview" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">📊</span> একনজরে (Executive)
+            </button>
+            <button onclick="switchTab('about')" id="btn-about" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">ℹ️</span> পৌরসভা পরিচিতি (About)
+            </button>
+            <button onclick="switchTab('audit')" id="btn-audit" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🔍</span> আর্থিক ব্যবচ্ছেদ (Audit)
+            </button>
+            <button onclick="switchTab('strategy')" id="btn-strategy" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🚀</span> মেয়রের রোডম্যাপ (Plan)
+            </button>
+            <button onclick="switchTab('simulator')" id="btn-simulator" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🎛️</span> ইমপ্যাক্ট সিমুলেটর (Sim)
+            </button>
+            <button onclick="switchTab('sources')" id="btn-sources" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">📚</span> তথ্যসূত্র (Sources)
+            </button>
+        </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="p-6 border-t border-slate-800 text-xs text-slate-500 hidden lg:block">
+            <p>Data Verified: FY 24-25</p>
+            <p class="mt-1">Pop: ~54k (Base) / 1.5L (Est)</p>
+            <p>Class: A (1st Class)</p>
+        </div>
+    </aside>
 
-        <!-- 1. OVERVIEW SECTION -->
-        <section id="tab-overview" class="animate-fade-in space-y-6">
-            <div class="bg-gradient-to-br from-emerald-900 to-slate-800 rounded-2xl p-8 text-white relative overflow-hidden shadow-lg">
-                <div class="relative z-10">
-                    <h2 class="text-3xl font-bold mb-4">কাঠামোগত পুনর্গঠনের প্রয়োজনীয়তা</h2>
-                    <p class="text-emerald-100 text-lg max-w-3xl leading-relaxed">
-                        ঝালকাঠি পৌরসভা একটি ঐতিহাসিক নদী-বন্দর যা বর্তমানে প্রশাসনিকভাবে গুরুত্বপূর্ণ কিন্তু আর্থিকভাবে নাজুক। 
-                        <span class="font-bold text-white">১৫৪.৮৭ কোটি টাকার বাজেট</span> থাকার পরেও নিজস্ব আয়ের ঘাটতি এবং নদীভাঙনের ঝুঁকির কারণে এটি একটি জটিল সন্ধিক্ষণে দাঁড়িয়ে আছে। 
-                        এই ড্যাশবোর্ডটি পৌরসভার বর্তমান অবস্থার ফরেনসিক অডিট এবং ভবিষ্যতের রোডম্যাপ।
+    <!-- Main Content -->
+    <main class="flex-grow h-auto lg:h-screen lg:overflow-y-auto w-full">
+        
+        <div class="max-w-7xl mx-auto p-4 lg:p-8 pb-20">
+
+            <!-- TAB 1: EXECUTIVE OVERVIEW -->
+            <section id="tab-overview" class="space-y-6 animate-fade-in">
+                <header class="mb-8">
+                    <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">কাঠামোগত পুনর্গঠন: বর্তমান চিত্র</h2>
+                    <p class="text-slate-600 mt-2 max-w-4xl text-sm lg:text-base">
+                        ১৮৭৫ সালে প্রতিষ্ঠিত এই ঐতিহাসিক নদী-বন্দর আজ আধুনিক নগরায়নের চ্যালেঞ্জের মুখে। ১৫৪ কোটি টাকার বাজেটের আড়ালে রয়েছে কাঠামোগত দুর্বলতা।
                     </p>
-                </div>
-                <div class="absolute right-0 bottom-0 opacity-10 text-9xl">⚓</div>
-            </div>
+                </header>
 
-            <!-- Top Level KPIs -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs text-slate-500 font-bold uppercase">ঘোষিত বাজেট (২০২৪-২৫)</p>
-                    <h3 class="text-2xl font-bold text-slate-800 mt-1">৳ ১৫৪.৮৭ কোটি</h3>
-                    <p class="text-xs text-red-500 mt-2">গত বছরের তুলনায় ০.৩০% সংকোচন</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs text-slate-500 font-bold uppercase">নিজস্ব রাজস্ব আয়</p>
-                    <h3 class="text-2xl font-bold text-amber-600 mt-1">৳ ১৫.৫ কোটি</h3>
-                    <p class="text-xs text-slate-400 mt-2">বাকি ৯০% সরকারি অনুদান নির্ভর</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs text-slate-500 font-bold uppercase">জনসংখ্যাতাত্ত্বিক শক্তি</p>
-                    <h3 class="text-2xl font-bold text-emerald-600 mt-1">৮৩.২১%</h3>
-                    <p class="text-xs text-slate-400 mt-2">স্বাক্ষরতার হার (জাতীয় গড়ের উপরে)</p>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs text-slate-500 font-bold uppercase">প্রশাসনিক এলাকা</p>
-                    <h3 class="text-2xl font-bold text-blue-600 mt-1">১৬.১৩ বর্গ কিমি</h3>
-                    <p class="text-xs text-slate-400 mt-2">১৮৭৫ সালে প্রতিষ্ঠিত</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. ABOUT JHALAKATHI (New Tab) -->
-        <section id="tab-about" class="hidden animate-fade-in space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- History & Geography -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2">ঐতিহাসিক ও ভৌগোলিক প্রেক্ষাপট</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <span class="bg-emerald-100 text-emerald-800 p-2 rounded-lg text-xl mr-3">📜</span>
-                            <div>
-                                <h4 class="font-bold text-slate-700">ঔপনিবেশিক উৎপত্তি (১৮৭৫)</h4>
-                                <p class="text-sm text-slate-600">ব্রিটিশ আমলে নদী বন্দরের বাণিজ্যিক প্রয়োজনে এই মিউনিসিপ্যালিটি গঠিত হয়। সুগন্ধা ও বিষখালী নদীর তীরে রৈখিক (Linear) নগরায়ন ঘটেছে।</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="bg-blue-100 text-blue-800 p-2 rounded-lg text-xl mr-3">🗺️</span>
-                            <div>
-                                <h4 class="font-bold text-slate-700">ভৌগোলিক দুর্বলতা</h4>
-                                <p class="text-sm text-slate-600">১৬.১৩ বর্গ কিমি এলাকাটি জোয়ার-ভাটা এবং নদীভাঙন প্রবণ। ড্রেনেজ ব্যবস্থা টাইডাল লক (Tidal Lock) দ্বারা প্রভাবিত।</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="bg-amber-100 text-amber-800 p-2 rounded-lg text-xl mr-3">🏠</span>
-                            <div>
-                                <h4 class="font-bold text-slate-700">আবাসন ও ঘনত্ব</h4>
-                                <p class="text-sm text-slate-600">২০১১ সালে খানা সংখ্যা ছিল ১২,৩৯৯, যা বর্তমানে ১৫,০০০+ আনুমানিক। শহরের ঘনত্ব বাড়ছে কিন্তু জেলা পর্যায়ে জনসংখ্যা কমছে (-০.২৯%)।</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Demographics Chart -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">মানব সম্পদ: স্বাক্ষরতার হার</h3>
-                    <p class="text-sm text-slate-500 mb-4">উচ্চ স্বাক্ষরতার হার 'স্মার্ট পৌরসভা' গড়ার প্রধান শক্তি।</p>
-                    <div class="chart-container">
-                        <canvas id="literacyChart"></canvas>
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-teal-600 shadow-sm">
+                        <div class="text-xs font-bold text-slate-500 uppercase">মোট বাজেট (২০২৪-২৫)</div>
+                        <div class="text-2xl font-bold text-slate-800 mt-1">৳ ১৫৪.৮৭ কোটি</div>
+                        <div class="text-xs text-teal-600 mt-2 font-medium">↑ বিশাল উন্নয়ন বরাদ্দ</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Infrastructure Highlights -->
-            <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 mb-4">গুরুত্বপূর্ণ অবকাঠামো</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                        <div class="text-2xl mb-2">🌀</div>
-                        <h4 class="font-bold text-slate-700">মাল্টিপারপাস সাইক্লোন শেল্টার</h4>
-                        <p class="text-xs text-slate-500">নিচতলা ফাঁকা (Surge pass), ওপরে স্কুল ও ক্লিনিক। দ্বিমুখী ব্যবহার।</p>
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                        <div class="text-xs font-bold text-slate-500 uppercase">কার্যকরী উদ্বৃত্ত (Surplus)</div>
+                        <div class="text-2xl font-bold text-amber-600 mt-1">৳ ১৪.৪৬ লক্ষ</div>
+                        <div class="text-xs text-slate-400 mt-2">মাত্র ০.১% (ভঙ্গুর অর্থনীতি)</div>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                        <div class="text-2xl mb-2">🌊</div>
-                        <h4 class="font-bold text-slate-700">নদী তীর রক্ষা বাঁধ</h4>
-                        <p class="text-xs text-slate-500">কুতুবনগর ও ভাটারাখান্দা এলাকায় BWDB এর মাধ্যমে চলমান প্রকল্প।</p>
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-blue-600 shadow-sm">
+                        <div class="text-xs font-bold text-slate-500 uppercase">স্বাক্ষরতার হার</div>
+                        <div class="text-2xl font-bold text-slate-800 mt-1">৮৩.২১%</div>
+                        <div class="text-xs text-blue-600 mt-2">মানবসম্পদে এগিয়ে</div>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                        <div class="text-2xl mb-2">🚰</div>
-                        <h4 class="font-bold text-slate-700">গভীর নলকূপ ও পাম্প</h4>
-                        <p class="text-xs text-slate-500">জনস্বাস্থ্য প্রকৌশল অধিদপ্তরের সহায়তায় সাবমার্সিবল পাম্প স্থাপন।</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. FINANCIAL ARCHITECTURE (Detailed) -->
-        <section id="tab-finance" class="hidden animate-fade-in space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Income Analysis -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-slate-800">আয়ের উৎসের ভঙ্গুরতা</h3>
-                        <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded font-bold">Pass-Through Entity</span>
-                    </div>
-                    <p class="text-sm text-slate-600 mb-4">বাজেটের মাত্র ১০% নিজস্ব আয়। বাকিটা দাতা সংস্থা (ADB/World Bank) এবং সরকারি অনুদান।</p>
-                    <div class="chart-container">
-                        <canvas id="incomePieChart"></canvas>
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
+                        <div class="text-xs font-bold text-slate-500 uppercase">নিজস্ব আয়ের অংশ</div>
+                        <div class="text-2xl font-bold text-red-600 mt-1">~১০%</div>
+                        <div class="text-xs text-red-400 mt-2">৯০% সরকারি অনুদান নির্ভর</div>
                     </div>
                 </div>
 
-                <!-- Expenditure Analysis -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4">ব্যয়ের খাতসমূহ (২০২৪-২৫)</h3>
-                    <p class="text-sm text-slate-600 mb-4">নদী শাসন ও অবকাঠামো রক্ষায় বিশাল ব্যয়, কিন্তু সামাজিক সুরক্ষায় বরাদ্দ কম।</p>
-                    <div class="chart-container">
-                        <canvas id="expenseBarChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Audit Insight Box -->
-            <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-xl">
-                <h4 class="text-amber-800 font-bold text-lg mb-2">ফরেঞ্জিক অডিট ইনসাইট:</h4>
-                <p class="text-amber-700 text-sm leading-relaxed">
-                    ১৫৪ কোটি টাকার বাজেটে <strong>উদ্বৃত্ত মাত্র ১৪.৪৬ লাখ টাকা</strong>। অর্থাৎ পৌরসভা কোনো সঞ্চয় করছে না, যা আসছে তাই খরচ হচ্ছে। নিজস্ব আয় (১৫.৫ কোটি) দিয়ে প্রশাসনিক ব্যয় (২০.৫ কোটি) মেটানো যাচ্ছে না। এটি একটি ৫ কোটি টাকার কাঠামোগত ঘাটতি নির্দেশ করে।
-                </p>
-            </div>
-        </section>
-
-        <!-- 4. STRATEGIC PLAN (4 Pillars) -->
-        <section id="tab-plan" class="hidden animate-fade-in space-y-8">
-            <div class="text-center max-w-3xl mx-auto mb-8">
-                <h2 class="text-2xl font-bold text-slate-800">কৌশলগত পুনর্গঠন পরিকল্পনা</h2>
-                <p class="text-slate-600 mt-2">শুধু রাস্তা ঘাট নির্মাণ নয়, বরং প্রতিষ্ঠানের আর্থিক ও প্রশাসনিক ডিএনএ পরিবর্তনের জন্য ৪টি স্তম্ভ।</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Pillar 1 -->
-                <div class="pillar-card bg-white p-6 rounded-2xl border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">💰</div>
-                    <h3 class="text-xl font-bold text-emerald-700 mb-3">১. আর্থিক সার্বভৌমত্ব (Revenue Revamp)</h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex gap-2"><span class="text-emerald-500">✔</span> <strong>GIS ভিত্তিক অ্যাসেসমেন্ট:</strong> ড্রোন সার্ভে করে করের আওতাভুক্ত নয় এমন ভবন চিহ্নিত করা।</li>
-                        <li class="flex gap-2"><span class="text-emerald-500">✔</span> <strong>সম্পদ মনিটাইজেশন:</strong> মার্কেট ও অডিটোরিয়ামের ভাড়া বাজার দরে উন্নীত করা।</li>
-                        <li class="flex gap-2"><span class="text-emerald-500">✔</span> <strong>ওয়াটার মিটারিং:</strong> ফ্ল্যাট রেট বাদ দিয়ে মিটারিং চালু করা।</li>
-                    </ul>
-                </div>
-
-                <!-- Pillar 2 -->
-                <div class="pillar-card bg-white p-6 rounded-2xl border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🌿</div>
-                    <h3 class="text-xl font-bold text-blue-700 mb-3">২. ব্লু-গ্রিন ইনফ্রাস্ট্রাকচার</h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex gap-2"><span class="text-blue-500">✔</span> <strong>টাইডাল ড্রেনেজ:</strong> গ্রাভিটি ড্রেনের বদলে পাম্প স্টেশন বসানো (CTEIP/MGSP প্রকল্পে)।</li>
-                        <li class="flex gap-2"><span class="text-blue-500">✔</span> <strong>নদী তীর উন্নয়ন:</strong> বাঁধের ওপর প্রমোদ উদ্যান তৈরি করে রাজস্ব আয়।</li>
-                        <li class="flex gap-2"><span class="text-blue-500">✔</span> <strong>কম্পোস্টিং প্ল্যান্ট:</strong> বাজারের বর্জ্য থেকে সার উৎপাদন।</li>
-                    </ul>
-                </div>
-
-                <!-- Pillar 3 -->
-                <div class="pillar-card bg-white p-6 rounded-2xl border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">📱</div>
-                    <h3 class="text-xl font-bold text-purple-700 mb-3">৩. স্মার্ট গভর্নেন্স ও স্বচ্ছতা</h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex gap-2"><span class="text-purple-500">✔</span> <strong>ডিজিটাল সেবা:</strong> ট্রেড লাইসেন্স ও কর অ্যাপের মাধ্যমে প্রদান।</li>
-                        <li class="flex gap-2"><span class="text-purple-500">✔</span> <strong>ই-জিপি (e-GP):</strong> ২৫,০০০ টাকার ওপরে সকল কেনাকাটা ই-টেন্ডারে।</li>
-                        <li class="flex gap-2"><span class="text-purple-500">✔</span> <strong>সিটিজেন চার্টার:</strong> স্ট্যাটিক বোর্ড নয়, ডায়নামিক ট্র্যাকিং।</li>
-                    </ul>
-                </div>
-
-                <!-- Pillar 4 -->
-                <div class="pillar-card bg-white p-6 rounded-2xl border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🎓</div>
-                    <h3 class="text-xl font-bold text-amber-700 mb-3">৪. প্রাতিষ্ঠানিক সক্ষমতা</h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex gap-2"><span class="text-amber-500">✔</span> <strong>স্টাফ ট্রেনিং:</strong> জলবায়ু সহনশীল নির্মাণ কৌশলে প্রকৌশলীদের প্রশিক্ষণ।</li>
-                        <li class="flex gap-2"><span class="text-amber-500">✔</span> <strong>স্বাস্থ্য সেবা:</strong> পৌর ক্লিনিক আধুনিকায়ন ও ভেক্টর কন্ট্রোল (ডেঙ্গু)।</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. SIMULATOR SECTION -->
-        <section id="tab-sim" class="hidden animate-fade-in space-y-8">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                <div class="max-w-4xl mx-auto text-center mb-8">
-                    <h2 class="text-2xl font-bold text-slate-800">রাজস্ব মডেলিং সিমুলেটর</h2>
-                    <p class="text-slate-600 mt-2">
-                        নিজস্ব আয় ১৫.৫ কোটি (১০%) থেকে বাড়িয়ে স্বাবলম্বী হওয়ার গাণিতিক মডেল।
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Controls -->
-                    <div class="lg:col-span-5 space-y-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <!-- Historical Context & Graph -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6">
                         <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="text-sm font-bold text-slate-700">GIS ভিত্তিক কর অ্যাসেসমেন্ট</label>
-                                <span id="val-eff" class="text-sm font-bold text-emerald-600">বর্তমান</span>
-                            </div>
-                            <input type="range" id="rangeEff" min="0" max="40" value="0" class="w-full">
-                            <p class="text-xs text-slate-500 mt-1">অঘোষিত স্থাপনা চিহ্নিত করে ২০-৪০% আয় বৃদ্ধি সম্ভব।</p>
+                            <h3 class="text-lg font-bold text-slate-800">বাজেট প্রবৃদ্ধির ঐতিহাসিক চিত্র (২০২২-২০২৫)</h3>
+                            <p class="text-sm text-slate-500">বিশেষ প্রকল্পের কারণে বাজেটের আকার বড় হলেও নিজস্ব আয় স্থির।</p>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="text-sm font-bold text-slate-700">বাজার ও লিজ রেট সমন্বয়</label>
-                                <span id="val-rent" class="text-sm font-bold text-amber-600">০%</span>
-                            </div>
-                            <input type="range" id="rangeRent" min="0" max="50" value="0" step="5" class="w-full">
-                            <p class="text-xs text-slate-500 mt-1">মুদ্রাস্ফীতি অনুযায়ী ভাড়া বৃদ্ধি।</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="historyChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: ABOUT PAURASHAVA -->
+            <section id="tab-about" class="space-y-6 hidden animate-fade-in">
+                <header class="mb-8 border-b border-slate-200 pb-4">
+                    <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">পৌরসভা পরিচিতি ও পরিসংখ্যান</h2>
+                </header>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                        <div class="text-2xl lg:text-3xl font-bold text-teal-700">১৮৭৫</div>
+                        <div class="text-xs text-slate-500 font-bold uppercase mt-1">স্থাপিত</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                        <div class="text-2xl lg:text-3xl font-bold text-teal-700">১৬.১৩</div>
+                        <div class="text-xs text-slate-500 font-bold uppercase mt-1">বর্গ কি.মি.</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                        <div class="text-2xl lg:text-3xl font-bold text-teal-700">৯</div>
+                        <div class="text-xs text-slate-500 font-bold uppercase mt-1">ওয়ার্ড সংখ্যা</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                        <div class="text-2xl lg:text-3xl font-bold text-teal-700">১২,৩৯৯</div>
+                        <div class="text-xs text-slate-500 font-bold uppercase mt-1">খানা (Households)</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 text-center">জনসংখ্যা বিন্যাস (বেসলাইন ২০১১)</h3>
+                        <div class="chart-container">
+                            <canvas id="aboutDemographicsChart"></canvas>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="text-sm font-bold text-slate-700">প্রশাসনিক অটোমেশন (ব্যয় হ্রাস)</label>
-                                <span id="val-admin" class="text-sm font-bold text-blue-600">০%</span>
-                            </div>
-                            <input type="range" id="rangeAdmin" min="0" max="20" value="0" step="1" class="w-full">
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 text-center">মানবসম্পদ: স্বাক্ষরতার হার</h3>
+                        <div class="chart-container">
+                            <canvas id="aboutLiteracyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: FORENSIC AUDIT (Expanded) -->
+            <section id="tab-audit" class="space-y-6 hidden animate-fade-in">
+                <header class="mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800">আর্থিক ব্যবচ্ছেদ (Forensic Audit)</h2>
+                    <p class="text-slate-600">পৌরসভার আয়ের গভীর বিশ্লেষণ এবং ব্যয়ের খাতসমূহ।</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- 1. Dependency Analysis -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 border-l-4 border-red-500 pl-3">১. পরনির্ভরশীলতার চিত্র</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="auditIncomeChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-3 bg-red-50 text-red-800 text-xs rounded">
+                            বাজেটের ৯০% আসে সরকারি অনুদান (Grant) থেকে। নিজস্ব আয় মাত্র ১০%।
                         </div>
                     </div>
 
-                    <!-- Output -->
-                    <div class="lg:col-span-7">
-                        <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm h-full flex flex-col justify-center items-center text-center">
-                            <h4 class="text-slate-500 text-sm font-bold uppercase mb-4">প্রজেক্টেড উদ্বৃত্ত তহবিল (Projected Surplus)</h4>
-                            <div id="result-surplus" class="text-4xl md:text-5xl font-bold text-emerald-600 mb-2">+ ৳ ০.০০ কোটি</div>
-                            <p class="text-xs text-slate-400">যা দিয়ে সরকারি অনুদান ছাড়াই রাস্তা ও ড্রেন করা সম্ভব</p>
+                    <!-- 2. Own Income Breakdown (NEW) -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 border-l-4 border-amber-500 pl-3">২. নিজস্ব আয়ের উৎস (Breakdown)</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="ownIncomeDetailChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-3 bg-amber-50 text-amber-800 text-xs rounded">
+                            নিজস্ব আয়ের ৫৫% আসে হোল্ডিং ট্যাক্স থেকে। মার্কেট ভাড়া ৩২%। বাকিটা ট্রেড লাইসেন্স ও ফী।
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Detailed Expense Breakdown (Restored) -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-500 pl-3">৩. বিস্তারিত ব্যয় খাত (Expenditure Vectors)</h3>
+                    <div class="chart-container">
+                        <canvas id="detailedExpenseChart"></canvas>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-slate-50 p-4 rounded border border-slate-100">
+                            <div class="font-bold text-slate-700">অবকাঠামো (৬৮%)</div>
+                            <p class="text-xs text-slate-500 mt-1">রাস্তা, ড্রেন ও নদী ভাঙন রোধ (কুতুবনগর বাঁধ)। এটিই প্রধান ব্যয়।</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded border border-red-100">
+                            <div class="font-bold text-red-700">প্রশাসন (১৩%)</div>
+                            <p class="text-xs text-red-600 mt-1">নিজস্ব আয়ের চেয়ে প্রশাসনিক ব্যয় বেশি (২০.৫ কোটি vs ১৫.৫ কোটি)।</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded border border-blue-100">
+                            <div class="font-bold text-blue-700">পানি ও বর্জ্য (১৪%)</div>
+                            <p class="text-xs text-blue-600 mt-1">১২টি নতুন পাম্প স্থাপন। বর্জ্য ব্যবস্থাপনায় বরাদ্দ এখনো অপ্রতুল।</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: STRATEGIC PLAN (Detailed Cards Restored) -->
+            <section id="tab-strategy" class="space-y-8 hidden animate-fade-in">
+                <header class="bg-slate-800 text-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-bold mb-2">স্বাবলম্বী ঝালকাঠি: ৫ দফার রোডম্যাপ</h2>
+                        <p class="text-slate-300">১৫৪ কোটি টাকার বাজেটকে কাজে লাগাতে এবং পরনির্ভরশীলতা কমাতে আমাদের সুনির্দিষ্ট পরিকল্পনা।</p>
+                    </div>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+                        <div class="text-emerald-600 text-3xl mb-4">💻</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">১. ডিজিটাল কর আদায়</h3>
+                        <p class="text-slate-600 text-sm mb-4">GIS ম্যাপ ব্যবহার করে সব বাড়ি চিহ্নিত করা হবে এবং অনলাইনে কর ব্যবস্থা চালু হবে।</p>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <p class="text-xs text-right mt-1 text-emerald-600 font-bold">লক্ষ্যমাত্রা: ৮৫% আদায়</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+                        <div class="text-amber-600 text-3xl mb-4">🏢</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">২. পৌর সম্পদ অডিট</h3>
+                        <p class="text-slate-600 text-sm mb-4">পৌরসভার দোকান ও মার্কেটের ভাড়া অনেক কম। সব লিজ চুক্তি অডিট করে বর্তমান বাজার দরে ভাড়া পুনর্নির্ধারণ করা হবে।</p>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">রাজস্ব বৃদ্ধি</span>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+                        <div class="text-red-600 text-3xl mb-4">✂️</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">৩. বাজেট পুনর্বিন্যাস</h3>
+                        <p class="text-slate-600 text-sm mb-4">প্রশাসনিক খরচ (২০.৫ কোটি) নিজস্ব আয়ের চেয়ে বেশি। অপ্রয়োজনীয় খরচ কমিয়ে নিজস্ব আয়ের মধ্যে ব্যয় সীমাবদ্ধ করা হবে।</p>
+                        <div class="text-sm font-bold text-red-600 mt-2">লক্ষ্য: ২০% ব্যয় হ্রাস</div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+                        <div class="text-blue-600 text-3xl mb-4">🤝</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">৪. পিপিপি (PPP) মডেল</h3>
+                        <p class="text-slate-600 text-sm mb-4">বর্জ্য ব্যবস্থাপনায় বেসরকারি খাতকে যুক্ত করা হবে। নাগরিকরা সামান্য ফী দিয়ে ঘরের সামনে থেকে ময়লা সরানোর সুবিধা পাবে।</p>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+                        <div class="text-purple-600 text-3xl mb-4">📢</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">৫. স্বচ্ছতা ও প্রকাশনা</h3>
+                        <p class="text-slate-600 text-sm mb-4">বাজেটের এক পাতার সহজ হিসাব নোটিশ বোর্ড ও অনলাইনে প্রকাশ করা হবে। জনগণ জানবে তাদের টাকা কোথায় খরচ হচ্ছে।</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: SIMULATOR -->
+            <section id="tab-simulator" class="space-y-8 hidden animate-fade-in">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 lg:p-8">
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <div class="lg:w-1/3 space-y-8">
+                            <h3 class="text-xl font-bold text-slate-800 mb-4">পলিশি সিমুলেটর</h3>
+                            <p class="text-sm text-slate-500 mb-6">প্যারামিটারগুলো পরিবর্তন করে দেখুন নিজস্ব তহবিল গঠন সম্ভব কি না।</p>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">GIS ম্যাপিং কভারেজ</label>
+                                    <span id="lbl-gis" class="text-teal-600 font-bold">0%</span>
+                                </div>
+                                <input type="range" id="rng-gis" min="0" max="30" value="0" step="5">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">মার্কেট ভাড়া সমন্বয়</label>
+                                    <span id="lbl-rent" class="text-teal-600 font-bold">0%</span>
+                                </div>
+                                <input type="range" id="rng-rent" min="0" max="50" value="0" step="10">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-sm font-bold text-slate-700">প্রশাসনিক অপচয় রোধ</label>
+                                    <span id="lbl-admin" class="text-teal-600 font-bold">0%</span>
+                                </div>
+                                <input type="range" id="rng-admin" min="0" max="20" value="0" step="2">
+                            </div>
                             
-                            <div class="grid grid-cols-3 gap-4 w-full mt-8">
-                                <div class="bg-slate-50 p-3 rounded border">
-                                    <div class="text-xl">🛣️</div>
-                                    <div id="res-road" class="font-bold text-slate-700">০ কিমি</div>
-                                    <div class="text-[10px] text-slate-400">নতুন রাস্তা</div>
+                            <button onclick="resetSim()" class="w-full py-2 border border-slate-300 rounded text-slate-600 text-sm hover:bg-slate-50">Reset Defaults</button>
+                        </div>
+
+                        <div class="lg:w-2/3 bg-slate-50 rounded-xl p-6 border border-slate-100 flex flex-col justify-between">
+                            <div class="chart-container h-64">
+                                <canvas id="simChart"></canvas>
+                            </div>
+                            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white p-3 rounded shadow-sm border-l-4 border-teal-500">
+                                    <div class="text-xs text-slate-500 uppercase">নতুন উদ্বৃত্ত তহবিল</div>
+                                    <div id="res-fund" class="text-2xl font-bold text-slate-800">৳ ০.০০ কোটি</div>
                                 </div>
-                                <div class="bg-slate-50 p-3 rounded border">
-                                    <div class="text-xl">🌊</div>
-                                    <div id="res-drain" class="font-bold text-slate-700">০ কিমি</div>
-                                    <div class="text-[10px] text-slate-400">পাম্প ড্রেনেজ</div>
-                                </div>
-                                <div class="bg-slate-50 p-3 rounded border">
-                                    <div class="text-xl">🏥</div>
-                                    <div id="res-clinic" class="font-bold text-slate-700">০ টি</div>
-                                    <div class="text-[10px] text-slate-400">ক্লিনিক আপগ্রেড</div>
+                                <div class="bg-white p-3 rounded shadow-sm border-l-4 border-blue-500">
+                                    <div class="text-xs text-slate-500 uppercase">সম্ভাব্য প্রকল্প</div>
+                                    <div id="res-projects" class="text-sm text-slate-700 mt-1 leading-tight">-</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 6. SOURCES SECTION (Detailed) -->
-        <section id="tab-sources" class="hidden animate-fade-in space-y-8">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">তথ্যসূত্র ও রেফারেন্স (Works Cited)</h2>
-                <div class="space-y-4 text-sm text-slate-700">
-                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
-                        <strong>১. ঝালকাঠি পৌরসভার ১৫৪ কোটি টাকার বাজেট</strong> - <em>Protidiner Sangbad, July 2024.</em> (বাজেট আকার ও আয়ের তথ্য)
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
-                        <strong>২. Population & Housing Census 2011 & 2022</strong> - <em>Bangladesh Bureau of Statistics (BBS).</em> (জনসংখ্যা, খানা ও স্বাক্ষরতার হার)
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
-                        <strong>৩. Coastal Towns Climate Resilience Project (CTEIP) Documents</strong> - <em>Asian Development Bank (ADB).</em> (সাইক্লোন শেল্টার ও ড্রেনেজ ডিজাইন)
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
-                        <strong>৪. e-GP Tender Notices (2024-25)</strong> - <em>Central Procurement Technical Unit (CPTU) & BWDB.</em> (নদী তীর রক্ষা বাঁধ ও সাবমার্সিবল পাম্প টেন্ডার)
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded border-l-4 border-slate-400">
-                        <strong>৫. Statistical Yearbook of Bangladesh 2019</strong> - <em>BBS.</em> (জেলা ও উপজেলা পরিসংখ্যান)
+            <!-- TAB 6: SOURCES -->
+            <section id="tab-sources" class="space-y-6 hidden animate-fade-in">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">তথ্যসূত্র ও রেফারেন্স</h2>
+                    <div class="space-y-4 text-sm text-slate-700">
+                        <div class="p-4 bg-slate-50 border border-slate-100 rounded">
+                            <strong class="block text-slate-900 mb-1">১. বাজেট ও আর্থিক তথ্য:</strong>
+                            <p>ঝালকাঠি পৌরসভার বাজেট ঘোষণা ২০২৪-২৫ (মেয়র লিয়াকত আলী তালুকদার)। <a href="#" class="text-teal-600 hover:underline">[Protidiner Sangbad, July 2024]</a></p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-100 rounded">
+                            <strong class="block text-slate-900 mb-1">২. জনশুমারি:</strong>
+                            <p>BBS Population & Housing Census 2011 & 2022. <a href="#" class="text-teal-600 hover:underline">[BBS Report]</a></p>
+                        </div>
                     </div>
                 </div>
+            </section>
+        </div>
+        
+        <!-- FOOTER -->
+        <footer class="bg-white border-t border-slate-200 py-6 mt-auto w-full">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <p class="font-bold text-slate-700">Jhalakathi Strategic Reconstruction Framework</p>
+                    <p class="text-xs mt-1">Developed for Municipal Analysis & Planning</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <p>Data Sources: Budget Speech 2024-25, BBS Census 2011/22</p>
+                    <p class="text-xs mt-1">&copy; 2025 Strategic Planning Unit</p>
+                </div>
             </div>
-        </section>
-
+        </footer>
     </main>
 
     <script>
-        // Data derived from White Paper
-        const data = {
-            budgetTotal: 154.87,
-            ownRevenue: 15.5,
-            adminCost: 20.5,
-            grantRevenue: 139.37,
-            literacy: { years: ['2011', '2022'], values: [77.9, 83.2] },
-            expenses: {
-                labels: ['অবকাঠামো ও নদী রক্ষা', 'প্রশাসন ও বেতন', 'পানি সরবরাহ', 'সামাজিক সুরক্ষা', 'বর্জ্য ব্যবস্থাপনা'],
-                values: [65, 13, 10, 8, 4] // Approximate percentages based on text analysis
+        // --- MOBILE MENU ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            if (!sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('w-full');
+                sidebar.classList.add('fixed', 'inset-0', 'top-16', 'z-50', 'bg-slate-900', 'overflow-y-auto');
+            } else {
+                sidebar.classList.remove('fixed', 'inset-0', 'top-16', 'z-50', 'bg-slate-900', 'overflow-y-auto');
             }
-        };
+        });
 
-        // Charts
-        let charts = {};
-
-        function initCharts() {
-            // Literacy Chart
-            if(document.getElementById('literacyChart')) {
-                const ctxLit = document.getElementById('literacyChart').getContext('2d');
-                charts.literacy = new Chart(ctxLit, {
-                    type: 'bar',
-                    data: {
-                        labels: data.literacy.years,
-                        datasets: [{
-                            label: 'স্বাক্ষরতার হার (%)',
-                            data: data.literacy.values,
-                            backgroundColor: ['#94A3B8', '#10B981'],
-                            borderRadius: 6
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
-                });
-            }
-
-            // Income Pie Chart
-            if(document.getElementById('incomePieChart')) {
-                const ctxInc = document.getElementById('incomePieChart').getContext('2d');
-                charts.income = new Chart(ctxInc, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['সরকারি অনুদান/প্রকল্প (৯০%)', 'নিজস্ব রাজস্ব (১০%)'],
-                        datasets: [{
-                            data: [139.37, 15.5],
-                            backgroundColor: ['#CBD5E1', '#F59E0B'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom' } } }
-                });
-            }
-
-            // Expense Bar Chart
-            if(document.getElementById('expenseBarChart')) {
-                const ctxExp = document.getElementById('expenseBarChart').getContext('2d');
-                charts.expense = new Chart(ctxExp, {
-                    type: 'bar',
-                    data: {
-                        labels: data.expenses.labels,
-                        datasets: [{
-                            label: 'বাজেট বরাদ্দ (%)',
-                            data: data.expenses.values,
-                            backgroundColor: ['#3B82F6', '#EF4444', '#06B6D4', '#8B5CF6', '#F59E0B'],
-                            borderRadius: 4
-                        }]
-                    },
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
-            }
-        }
-
-        // Navigation
-        function nav(tabId) {
-            // Hide all tabs
-            ['overview', 'about', 'finance', 'plan', 'sim', 'sources'].forEach(id => {
-                document.getElementById('tab-' + id).classList.add('hidden');
-                // Button styles
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            ['overview', 'about', 'audit', 'strategy', 'simulator', 'sources'].forEach(id => {
+                const tab = document.getElementById('tab-' + id);
                 const btn = document.getElementById('btn-' + id);
+                if(tab) tab.classList.add('hidden');
                 if(btn) {
-                    btn.classList.remove('nav-active', 'text-emerald-700');
-                    btn.classList.add('text-slate-600');
+                    btn.classList.remove('active', 'bg-slate-800', 'text-white', 'border-l-4', 'border-amber-500');
+                    btn.classList.add('text-slate-300');
                 }
             });
 
-            // Show selected
             document.getElementById('tab-' + tabId).classList.remove('hidden');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.add('nav-active', 'text-emerald-700');
-                activeBtn.classList.remove('text-slate-600');
+            const btn = document.getElementById('btn-' + tabId);
+            if(btn) {
+                btn.classList.add('active', 'bg-slate-800', 'text-white');
+                btn.classList.remove('text-slate-300');
             }
 
-            // Resize charts if becoming visible
-            if(tabId === 'about' && charts.literacy) charts.literacy.resize();
-            if(tabId === 'finance') {
-                if(charts.income) charts.income.resize();
-                if(charts.expense) charts.expense.resize();
+            if (window.innerWidth < 1024) {
+                 sidebar.classList.add('hidden');
+                 sidebar.classList.remove('fixed', 'inset-0', 'top-16', 'z-50', 'bg-slate-900', 'overflow-y-auto');
             }
+
+            // Init Charts
+            if(tabId === 'overview' && !historyChart) initHistoryChart();
+            if(tabId === 'audit' && !auditIncomeChart) initAuditCharts();
+            if(tabId === 'simulator' && !simChart) initSimChart();
+            if(tabId === 'about' && !aboutDemographicsChart) initAboutCharts();
         }
 
-        // Simulator Logic
-        function updateSim() {
-            const eff = parseInt(document.getElementById('rangeEff').value);
-            const rent = parseInt(document.getElementById('rangeRent').value);
-            const admin = parseInt(document.getElementById('rangeAdmin').value);
+        // --- CHART CONFIG ---
+        Chart.defaults.font.family = "'Hind Siliguri', sans-serif";
+        Chart.defaults.color = '#475569';
+        Chart.defaults.maintainAspectRatio = false;
 
-            // Update Labels
-            document.getElementById('val-eff').innerText = eff > 0 ? `+${eff}%` : 'বর্তমান';
-            document.getElementById('val-rent').innerText = `+${rent}%`;
-            document.getElementById('val-admin').innerText = `-${admin}%`;
+        let historyChart, aboutDemographicsChart, aboutLiteracyChart, auditIncomeChart, ownIncomeDetailChart, detailedExpenseChart, simChart;
 
-            // Calculations based on 15.5 Cr Own Revenue & 20.5 Cr Admin Cost
-            // 1. Efficiency Gain (Tax is approx 8.5 of the 15.5)
-            const taxGain = (8.5) * (eff / 100);
-            
-            // 2. Rent Gain (Rent is approx 5.0 of the 15.5)
-            const rentGain = (5.0) * (rent / 100);
-
-            // 3. Admin Savings (Base 20.5)
-            const adminSave = 20.5 * (admin / 100);
-
-            const totalSurplus = taxGain + rentGain + adminSave;
-
-            // Output
-            document.getElementById('result-surplus').innerText = `+ ৳ ${convertBangla(totalSurplus.toFixed(2))} কোটি`;
-            
-            // Physical Equivalent (Road 1Cr, PumpDrain 1.5Cr, Clinic 0.5Cr)
-            document.getElementById('res-road').innerText = convertBangla((totalSurplus * 0.5).toFixed(1)) + ' কিমি';
-            document.getElementById('res-drain').innerText = convertBangla((totalSurplus * 0.3 / 1.5).toFixed(1)) + ' কিমি';
-            document.getElementById('res-clinic').innerText = convertBangla(Math.floor(totalSurplus * 0.2 / 0.5)) + ' টি';
-        }
-
-        function convertBangla(str) {
-            const numbers = { '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯' };
-            return String(str).replace(/[0-9]/g, match => numbers[match]);
-        }
-
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            initCharts();
-            ['rangeEff', 'rangeRent', 'rangeAdmin'].forEach(id => {
-                document.getElementById(id).addEventListener('input', updateSim);
+        function initHistoryChart() {
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            historyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['২০২২-২৩', '২০২৩-২৪', '২০২৪-২৫'],
+                    datasets: [{
+                        label: 'মোট বাজেট (কোটি টাকা)',
+                        data: [142.5, 155.33, 154.87],
+                        backgroundColor: '#0F766E', // Teal
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: false, min: 100 } }
+                }
             });
+        }
+
+        function initAboutCharts() {
+            const ctxDemo = document.getElementById('aboutDemographicsChart').getContext('2d');
+            aboutDemographicsChart = new Chart(ctxDemo, {
+                type: 'pie',
+                data: {
+                    labels: ['পুরুষ (৫১%)', 'মহিলা (৪৯%)'],
+                    datasets: [{
+                        data: [27528, 26501],
+                        backgroundColor: ['#0F766E', '#F59E0B'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } } }
+            });
+
+            const ctxLit = document.getElementById('aboutLiteracyChart').getContext('2d');
+            aboutLiteracyChart = new Chart(ctxLit, {
+                type: 'bar',
+                data: {
+                    labels: ['জাতীয় গড়', 'ঝালকাঠি জেলা'],
+                    datasets: [{
+                        label: 'স্বাক্ষরতার হার (%)',
+                        data: [74.66, 83.21],
+                        backgroundColor: ['#CBD5E1', '#0D9488'],
+                        borderRadius: 4
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+            });
+        }
+
+        function initAuditCharts() {
+            // 1. Dependency
+            const ctxAudit = document.getElementById('auditIncomeChart').getContext('2d');
+            auditIncomeChart = new Chart(ctxAudit, {
+                type: 'doughnut',
+                data: {
+                    labels: ['সরকারি অনুদান (৯০%)', 'নিজস্ব আয় (১০%)'],
+                    datasets: [{
+                        data: [139.37, 15.5],
+                        backgroundColor: ['#CBD5E1', '#F59E0B'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } }, cutout: '70%' }
+            });
+
+            // 2. Own Income Detail (NEW)
+            const ctxOwn = document.getElementById('ownIncomeDetailChart').getContext('2d');
+            ownIncomeDetailChart = new Chart(ctxOwn, {
+                type: 'pie',
+                data: {
+                    labels: ['হোল্ডিং ট্যাক্স', 'মার্কেট ভাড়া', 'লাইসেন্স ও ফী'],
+                    datasets: [{
+                        data: [8.5, 5.0, 2.0],
+                        backgroundColor: ['#059669', '#D97706', '#64748B'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // 3. Detailed Expense (NEW)
+            const ctxExp = document.getElementById('detailedExpenseChart').getContext('2d');
+            detailedExpenseChart = new Chart(ctxExp, {
+                type: 'bar',
+                data: {
+                    labels: ['অবকাঠামো', 'প্রশাসন', 'পানি সরবরাহ', 'বর্জ্য', 'অন্যান্য'],
+                    datasets: [{
+                        label: 'ব্যয় (কোটি টাকা)',
+                        data: [105.0, 20.5, 15.0, 6.0, 8.37],
+                        backgroundColor: ['#475569', '#EF4444', '#3B82F6', '#10B981', '#CBD5E1'],
+                        borderRadius: 4
+                    }]
+                },
+                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+        }
+
+        function initSimChart() {
+            const ctx = document.getElementById('simChart').getContext('2d');
+            simChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['বর্তমান নিজস্ব আয়', 'প্রজেক্টেড আয়'],
+                    datasets: [
+                        { label: 'ভিত্তি আয়', data: [15.5, 15.5], backgroundColor: '#94A3B8', stack: 'Stack 0' },
+                        { label: 'নতুন সংযোজন', data: [0, 0], backgroundColor: '#0D9488', stack: 'Stack 0' },
+                        { label: 'সাশ্রয়', data: [0, 0], backgroundColor: '#10B981', stack: 'Stack 0' }
+                    ]
+                },
+                options: { scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }
+            });
+        }
+
+        // --- SIMULATOR LOGIC ---
+        function updateSim() {
+            const gisVal = parseInt(document.getElementById('rng-gis').value);
+            const rentVal = parseInt(document.getElementById('rng-rent').value);
+            const adminVal = parseInt(document.getElementById('rng-admin').value);
+
+            document.getElementById('lbl-gis').innerText = gisVal + '%';
+            document.getElementById('lbl-rent').innerText = '+' + rentVal + '%';
+            document.getElementById('lbl-admin').innerText = '-' + adminVal + '%';
+
+            const taxBase = 8.5; 
+            const newTax = taxBase * (gisVal / 100);
+            const rentBase = 5.0;
+            const newRent = rentBase * (rentVal / 100);
+            const adminBase = 20.5;
+            const savings = adminBase * (adminVal / 100);
+            const totalNewFund = newTax + newRent + savings;
+
+            simChart.data.datasets[1].data[1] = (newTax + newRent).toFixed(2);
+            simChart.data.datasets[2].data[1] = savings.toFixed(2);
+            simChart.update();
+
+            document.getElementById('res-fund').innerText = '৳ ' + totalNewFund.toFixed(2) + ' কোটি';
+            
+            let projects = [];
+            if(totalNewFund > 1) projects.push("✅ পাম্পিং স্টেশন (২টি)");
+            if(totalNewFund > 3) projects.push("✅ রিভার ড্রাইভ (১ কি.মি.)");
+            if(totalNewFund > 5) projects.push("✅ আধুনিক বর্জ্য প্ল্যান্ট");
+            if(totalNewFund === 0) projects.push("কোনো নতুন প্রজেক্ট সম্ভব নয়");
+            document.getElementById('res-projects').innerHTML = projects.join('<br>');
+        }
+
+        function resetSim() {
+            document.getElementById('rng-gis').value = 0;
+            document.getElementById('rng-rent').value = 0;
+            document.getElementById('rng-admin').value = 0;
+            updateSim();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initHistoryChart(); // Load overview chart immediately
+            document.getElementById('rng-gis').addEventListener('input', updateSim);
+            document.getElementById('rng-rent').addEventListener('input', updateSim);
+            document.getElementById('rng-admin').addEventListener('input', updateSim);
         });
     </script>
 </body>
