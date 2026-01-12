@@ -118,6 +118,16 @@ const translations = {
                     status: "পরিকল্পিত"
                 }
             }
+        },
+        
+        // Common phrases
+        common: {
+            vision: "ভিশন ২০২৬/২৭",
+            planned: "পরিকল্পিত",
+            comingSoon: "আসছে",
+            baseline: "বেসলাইন",
+            model: "মডেল",
+            national: "জাতীয়"
         }
     },
     
@@ -237,6 +247,16 @@ const translations = {
                     status: "Planned"
                 }
             }
+        },
+        
+        // Common phrases
+        common: {
+            vision: "Vision 2026/27",
+            planned: "Planned",
+            comingSoon: "Coming Soon",
+            baseline: "Baseline",
+            model: "Model",
+            national: "National"
         }
     }
 };
