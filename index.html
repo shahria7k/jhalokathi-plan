@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jhalakathi Paurashava: Strategic Reconstruction Framework</title>
+    <title>ঝালকাঠি মডেল পৌরসভা: জাতীয় উদাহরণ | Model Municipality Development</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Language Toggle -->
+    <script src="js/language.js"></script>
 
     <!-- Font: Hind Siliguri for Professional Bangla -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,6 +67,60 @@
             color: white;
             border-left: 4px solid #F59E0B; /* Amber 500 */
         }
+
+        /* Hero Gradient Animation */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hero-gradient {
+            background: linear-gradient(-45deg, #0F766E, #059669, #0D9488, #14B8A6);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        /* Model Badge */
+        .model-badge {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Badge System */
+        .badge-model {
+            background: linear-gradient(135deg, #059669 0%, #0D9488 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .badge-national {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-innovation {
+            background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-ready {
+            background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="flex flex-col lg:flex-row min-h-screen bg-slate-50">
@@ -71,39 +128,65 @@
     <!-- Mobile Header -->
     <div class="lg:hidden bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
         <div>
-            <h1 class="font-bold text-lg">ঝালকাঠি পৌরসভা</h1>
-            <p class="text-xs text-teal-400">Strategic Dashboard</p>
+            <h1 class="font-bold text-lg">ঝালকাঠি মডেল পৌরসভা</h1>
+            <p class="text-xs text-teal-400">জাতীয় উদাহরণ</p>
         </div>
+        <div class="flex items-center gap-2">
+            <button id="lang-toggle" onclick="toggleLanguage()" class="text-white px-3 py-1 text-xs border border-slate-700 rounded hover:bg-slate-800">
+                <span id="lang-text">EN</span>
+            </button>
         <button id="mobile-menu-btn" class="text-white p-2 focus:outline-none border border-slate-700 rounded">
             ☰ মেনু
         </button>
+        </div>
     </div>
 
     <!-- Sidebar Navigation -->
     <aside id="sidebar" class="hidden lg:flex bg-slate-900 text-slate-300 w-full lg:w-64 flex-shrink-0 flex-col shadow-xl z-40 lg:h-screen lg:sticky lg:top-0 transition-all duration-300 ease-in-out">
         <div class="hidden lg:block p-6 bg-slate-950 border-b border-slate-800">
-            <h1 class="text-xl font-bold text-white tracking-tight">ঝালকাঠি পৌরসভা</h1>
-            <p class="text-xs text-teal-500 font-medium mt-1 uppercase tracking-wider">Strategic Framework</p>
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-bold text-white tracking-tight">ঝালকাঠি মডেল পৌরসভা</h1>
+                    <span class="badge-model text-xs">মডেল</span>
+                </div>
+                <button id="lang-toggle-desktop" onclick="toggleLanguage()" class="text-white px-3 py-1 text-xs border border-slate-700 rounded hover:bg-slate-800">
+                    <span id="lang-text-desktop">EN</span>
+                </button>
+            </div>
+            <p class="text-xs text-teal-500 font-medium mt-1 uppercase tracking-wider">জাতীয় উদাহরণ</p>
+            <p class="text-xs text-amber-400 mt-2">Model Municipality Initiative</p>
         </div>
         
         <nav class="flex-grow py-4 lg:py-6 space-y-1 overflow-y-auto">
-            <button onclick="switchTab('overview')" id="btn-overview" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">📊</span> একনজরে (Executive)
+            <button onclick="switchTab('vision')" id="btn-vision" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🎯</span> ভিশন ও মিশন
             </button>
-            <button onclick="switchTab('about')" id="btn-about" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">ℹ️</span> পৌরসভা পরিচিতি (About)
+            <button onclick="switchTab('overview')" id="btn-overview" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">📊</span> বর্তমান অবস্থা
+            </button>
+            <button onclick="switchTab('experiments')" id="btn-experiments" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🧪</span> মডেল পরীক্ষা
+            </button>
+            <button onclick="switchTab('progress')" id="btn-progress" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">📈</span> অগ্রগতি ট্র্যাকার
+            </button>
+            <button onclick="switchTab('replication')" id="btn-replication" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🔄</span> প্রতিলিপি কাঠামো
+            </button>
+            <button onclick="switchTab('impact')" id="btn-impact" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
+                <span class="mr-3">🌟</span> জাতীয় প্রভাব
             </button>
             <button onclick="switchTab('audit')" id="btn-audit" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">🔍</span> আর্থিক ব্যবচ্ছেদ (Audit)
+                <span class="mr-3">🔍</span> আর্থিক স্বাস্থ্য
             </button>
             <button onclick="switchTab('strategy')" id="btn-strategy" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">🚀</span>রোডম্যাপ (Plan)
+                <span class="mr-3">🚀</span> কৌশল ও রোডম্যাপ
             </button>
             <button onclick="switchTab('simulator')" id="btn-simulator" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">🎛️</span> ইমপ্যাক্ট সিমুলেটর (Sim)
+                <span class="mr-3">🎛️</span> ইমপ্যাক্ট সিমুলেটর
             </button>
             <button onclick="switchTab('sources')" id="btn-sources" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center">
-                <span class="mr-3">📚</span> তথ্যসূত্র (Sources)
+                <span class="mr-3">📚</span> সম্পদ
             </button>
         </nav>
 
@@ -118,13 +201,45 @@
     <main class="flex-grow h-auto lg:h-screen lg:overflow-y-auto w-full">
         
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 pb-20">
+            
+            <!-- Hero Section -->
+            <div class="hero-gradient rounded-2xl shadow-2xl mb-8 p-8 lg:p-12 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span class="model-badge px-4 py-2 rounded-full text-sm font-bold text-white">মডেল পৌরসভা</span>
+                        <span class="badge-national">জাতীয় উদাহরণ</span>
+                        <span class="badge-innovation">ইনোভেশন ল্যাব</span>
+                    </div>
+                    <h1 class="text-3xl lg:text-5xl font-bold mb-4 hero-title">বাংলাদেশের প্রথম প্রতিলিপিযোগ্য মডেল পৌরসভা</h1>
+                    <p class="text-lg lg:text-xl text-white/90 mb-6 max-w-3xl leading-relaxed hero-subtitle">
+                        ঝালকাঠি পৌরসভা একটি পরীক্ষামূলক প্রকল্প হিসেবে কাজ করবে - যেখানে আমরা নতুন ধারণা পরীক্ষা করব, শিখব, এবং সফল সমাধানগুলো জাতীয়ভাবে ছড়িয়ে দেওয়ার জন্য প্রস্তুত করব। এটি আমাদের ভিশন ২০২৬/২৭।
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                            <div class="text-2xl font-bold">১০+</div>
+                            <div class="text-sm">পরিকল্পিত পরীক্ষা</div>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                            <div class="text-2xl font-bold">৫+</div>
+                            <div class="text-sm">প্রতিলিপি প্রস্তুত</div>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                            <div class="text-2xl font-bold">২০২৬/২৭</div>
+                            <div class="text-sm">ভিশন</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- TAB 1: EXECUTIVE OVERVIEW -->
-            <section id="tab-overview" class="space-y-6 animate-fade-in">
+            <!-- TAB 2: CURRENT STATUS (Renamed from Executive Overview) -->
+            <section id="tab-overview" class="space-y-6 hidden animate-fade-in">
                 <header class="mb-8">
-                    <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">ঝালকাঠি পৌরসভা: এখনকার অবস্থা</h2>
+                    <div class="flex items-center gap-3 mb-3">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">বর্তমান অবস্থা: রূপান্তরের ভিত্তি</h2>
+                        <span class="badge-model">বেসলাইন</span>
+                    </div>
                     <p class="text-slate-600 mt-2 text-sm lg:text-base leading-relaxed">
-                        ১৮৭৫ সালে প্রতিষ্ঠিত আমাদের এই নদী-বন্দর শহরটি আজ অনেক চ্যালেঞ্জের মুখে। বাজেট দেখে মনে হচ্ছে সব ঠিক আছে, কিন্তু আসলে নিজের পায়ে দাঁড়ানোর মতো আয় নেই। এই ড্যাশবোর্ডে দেখানো হয়েছে পৌরসভার আর্থিক অবস্থা, জনসংখ্যা, এবং অবকাঠামোর বিস্তারিত চিত্র।
+                        ১৮৭৫ সালে প্রতিষ্ঠিত আমাদের এই নদী-বন্দর শহরটি মডেল পৌরসভা হওয়ার জন্য অনন্য সুযোগ আছে। উচ্চ শিক্ষার হার, ঐতিহাসিক গুরুত্ব, এবং সম্প্রদায়ের অংশগ্রহণ - এগুলো আমাদের শক্তি। এই ড্যাশবোর্ডে দেখানো হয়েছে মডেল গড়ে তোলার জন্য আমাদের বর্তমান অবস্থা।
                     </p>
                 </header>
 
@@ -173,8 +288,8 @@
                                 <p class="text-xs text-slate-500 mt-1">স্বাধীনতার পর পৌরসভা হিসেবে স্বীকৃতি পেল। প্রথম শ্রেণির মর্যাদা পেল।</p>
                             </div>
                             <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                <div class="text-sm font-bold text-slate-700">২০২৪: এখন</div>
-                                <p class="text-xs text-slate-500 mt-1">নদী ভাঙছে, জলবায়ু পরিবর্তন হচ্ছে, নিজের আয় কম। এখনই কিছু করতে হবে।</p>
+                                <div class="text-sm font-bold text-slate-700">২০২৬: ভিশন</div>
+                                <p class="text-xs text-slate-500 mt-1">মডেল পৌরসভা গড়ে তোলার পরিকল্পনা। নতুন ধারণা পরীক্ষা করব, শিখব, এবং জাতীয়ভাবে ছড়িয়ে দেব।</p>
                             </div>
                         </div>
                     </div>
@@ -184,7 +299,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                     <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6">
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800">বাজেটের অবস্থা (২০২২-২০২৫)</h3>
+                            <h3 class="text-lg font-bold text-slate-800">বাজেটের অবস্থা (২০২২-২০২৬)</h3>
                             <p class="text-sm text-slate-500">বাজেট বড় হচ্ছে, কিন্তু নিজের আয় একই জায়গায়। প্রকল্পের টাকা আসছে, কিন্তু নিজের আয় বাড়ছে না।</p>
                         </div>
                     </div>
@@ -352,9 +467,605 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Why Jhalakathi Can Be a Model -->
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border-2 border-emerald-300 shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 border-l-4 border-emerald-600 pl-3">কেন ঝালকাঠি মডেল পৌরসভা হতে পারে?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-xl border border-emerald-200">
+                            <div class="text-3xl mb-3">📚</div>
+                            <div class="font-bold text-emerald-800 mb-2">উচ্চ শিক্ষার হার</div>
+                            <p class="text-xs text-slate-700">৮৩.২১% স্বাক্ষরতা মানে নাগরিকরা ডিজিটাল সেবা নিতে প্রস্তুত। এটা আমাদের বড় সুবিধা।</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-emerald-200">
+                            <div class="text-3xl mb-3">🏛️</div>
+                            <div class="font-bold text-emerald-800 mb-2">ঐতিহাসিক গুরুত্ব</div>
+                            <p class="text-xs text-slate-700">১৮৭৫ থেকে প্রশাসনিক অভিজ্ঞতা আছে। জেলা সদর হওয়ায় জাতীয় দৃষ্টি আকর্ষণ করতে পারি।</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-emerald-200">
+                            <div class="text-3xl mb-3">👥</div>
+                            <div class="font-bold text-emerald-800 mb-2">সম্প্রদায়ের অংশগ্রহণ</div>
+                            <p class="text-xs text-slate-700">শিক্ষিত নাগরিকরা নতুন ধারণা গ্রহণ করতে পারবে এবং অংশ নিতে পারবে।</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <!-- TAB 2: ABOUT PAURASHAVA -->
+            <!-- TAB 3: MODEL EXPERIMENTS -->
+            <section id="tab-experiments" class="space-y-8 hidden animate-fade-in">
+                <header class="mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">পরিকল্পিত পরীক্ষা: কম খরচে বড় সমাধান</h2>
+                        <span class="badge-model">পরিকল্পিত</span>
+                    </div>
+                    <p class="text-slate-600 mt-2 text-sm lg:text-base leading-relaxed">
+                        আমরা বিশ্বের সফল উদাহরণ থেকে শিখে কম খরচে বড় প্রভাব ফেলতে পারে এমন পরীক্ষা করব। প্রতিটি পরীক্ষার ফলাফল নথিভুক্ত করা হবে যাতে অন্য পৌরসভাগুলো শিখতে পারে।
+                    </p>
+                </header>
+
+                <!-- Experiment Planning Dashboard -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-purple-600 pl-3">পরীক্ষার পরিকল্পনা</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-200 text-center">
+                            <div class="text-3xl font-bold text-purple-700">১০+</div>
+                            <div class="text-sm text-purple-600 mt-1">পরিকল্পনাধীন</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 text-center">
+                            <div class="text-3xl font-bold text-blue-700">০</div>
+                            <div class="text-sm text-blue-600 mt-1">চলমান</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                            <div class="text-3xl font-bold text-green-700">০</div>
+                            <div class="text-sm text-green-600 mt-1">সফল</div>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 text-center">
+                            <div class="text-3xl font-bold text-amber-700">০</div>
+                            <div class="text-sm text-amber-600 mt-1">প্রতিলিপি প্রস্তুত</div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-4 text-center">সব পরীক্ষা এখনো পরিকল্পনা পর্যায়ে। ২০২৬ সালে শুরু হবে।</p>
+                </div>
+
+                <!-- Low-Cost, High-Impact Solutions -->
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-300 shadow-lg p-6">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">💡</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">নিম্ন খরচে বড় সমাধান: বিশ্বের সফল উদাহরণ</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-2">সারা বিশ্বে যেসব শহর কম টাকায় বড় পরিবর্তন এনেছে, তাদের থেকে শেখা। এগুলো দ্রুত শুরু করা যায়, খরচ কম, কিন্তু প্রভাব অনেক বড়।</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Solution 1: Citizen Reporting App -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-emerald-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পনাধীন</span>
+                            </div>
+                            <div class="text-2xl mb-3">📱</div>
+                            <div class="font-bold text-emerald-800 text-sm mb-2">১. নাগরিক রিপোর্টিং অ্যাপ (FixMyStreet মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> যুক্তরাজ্যের মতো একটি সহজ মোবাইল অ্যাপ যেখানে নাগরিকরা সমস্যা (ড্রেনেজ, রাস্তা, আলো) রিপোর্ট করতে পারে।
+                            </p>
+                            <div class="bg-emerald-50 p-2 rounded text-xs text-emerald-700">
+                                <strong>খরচ:</strong> ~৳ ৫ লক্ষ (একবার) | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> ৫০% বেশি সমস্যা চিহ্নিত, দ্রুত সমাধান
+                            </div>
+                        </div>
+
+                        <!-- Solution 2: Adopt-a-Street Program -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-blue-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">🤝</div>
+                            <div class="font-bold text-blue-800 text-sm mb-2">২. "আমার রাস্তা" প্রোগ্রাম (Adopt-a-Street)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> স্থানীয় ব্যবসায়ী বা পরিবার একটি রাস্তার দায়িত্ব নেয় - পরিষ্কার, আলো, গাছপালা।
+                            </p>
+                            <div class="bg-blue-50 p-2 rounded text-xs text-blue-700">
+                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ৩০% রক্ষণাবেক্ষণ খরচ কম, সম্প্রদায়ের অংশগ্রহণ
+                            </div>
+                        </div>
+
+                        <!-- Solution 3: Waste Picker Cooperatives -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-amber-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পনাধীন</span>
+                            </div>
+                            <div class="text-2xl mb-3">♻️</div>
+                            <div class="font-bold text-amber-800 text-sm mb-2">৩. বর্জ্য সংগ্রাহক কোঅপারেটিভ (ব্রাজিল মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> অনানুষ্ঠানিক বর্জ্য সংগ্রাহকদের সংগঠিত করে কোঅপারেটিভ তৈরি। তারা পুনর্ব্যবহারযোগ্য জিনিস বিক্রি করে আয় করে।
+                            </p>
+                            <div class="bg-amber-50 p-2 rounded text-xs text-amber-700">
+                                <strong>খরচ:</strong> ~৳ ১০ লক্ষ (শুরুতে) | <strong>সময়:</strong> ৩ মাস | <strong>ফলাফল:</strong> ৪০% বর্জ্য কম, ২০০+ কাজের সুযোগ
+                            </div>
+                        </div>
+
+                        <!-- Solution 4: Community Gardens -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-green-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">🌱</div>
+                            <div class="font-bold text-green-800 text-sm mb-2">৪. সম্প্রদায় বাগান (ডেট্রয়েট মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> খালি জায়গায় সম্প্রদায় সবজি বাগান। স্থানীয়রা নিজেরাই দেখাশোনা করে, সবজি বিক্রি করে আয় করে।
+                            </p>
+                            <div class="bg-green-50 p-2 rounded text-xs text-green-700">
+                                <strong>খরচ:</strong> ~৳ ২ লক্ষ/বাগান | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> খাদ্য নিরাপত্তা, আয়, সবুজ স্থান
+                            </div>
+                        </div>
+
+                        <!-- Solution 5: Public Space Advertising -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-purple-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">📢</div>
+                            <div class="font-bold text-purple-800 text-sm mb-2">৫. পাবলিক স্পেস বিজ্ঞাপন (নিউ ইয়র্ক মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> বাস স্টপ, রাস্তার পোস্ট, সাইক্লোন শেল্টারে বিজ্ঞাপনের জায়গা ভাড়া দেওয়া।
+                            </p>
+                            <div class="bg-purple-50 p-2 rounded text-xs text-purple-700">
+                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ~৳ ১-২ কোটি/বছর আয়
+                            </div>
+                        </div>
+
+                        <!-- Solution 6: Time Bank / Skill Exchange -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-pink-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পনাধীন</span>
+                            </div>
+                            <div class="text-2xl mb-3">⏰</div>
+                            <div class="font-bold text-pink-800 text-sm mb-2">৬. সময় ব্যাংক (জাপান/যুক্তরাজ্য মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> মানুষ তাদের দক্ষতা (ইংরেজি, কম্পিউটার, মেরামত) শেয়ার করে, সময়ের বিনিময়ে অন্য সেবা পায়।
+                            </p>
+                            <div class="bg-pink-50 p-2 rounded text-xs text-pink-700">
+                                <strong>খরচ:</strong> ~৳ ৩ লক্ষ (সফটওয়্যার) | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> বিনামূল্যে দক্ষতা উন্নয়ন, সম্প্রদায় বন্ধন
+                            </div>
+                        </div>
+
+                        <!-- Solution 7: Micro-Entrepreneurship for Services -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-indigo-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">🚀</div>
+                            <div class="font-bold text-indigo-800 text-sm mb-2">৭. মাইক্রো-উদ্যোক্তা প্রোগ্রাম (কেনিয়া মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> তরুণদের ছোট ব্যবসা শুরু করতে সাহায্য (মোবাইল রিচার্জ, কুরিয়ার, ডিজিটাল সেবা) - পৌরসভা প্রথম গ্রাহক।
+                            </p>
+                            <div class="bg-indigo-50 p-2 rounded text-xs text-indigo-700">
+                                <strong>খরচ:</strong> ~৳ ২০ লক্ষ (ঋণ) | <strong>সময়:</strong> ২ মাস | <strong>ফলাফল:</strong> ১০০+ কাজ, স্থানীয় সেবা উন্নতি
+                            </div>
+                        </div>
+
+                        <!-- Solution 8: Community Savings Groups -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-cyan-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">💰</div>
+                            <div class="font-bold text-cyan-800 text-sm mb-2">৮. সম্প্রদায় সঞ্চয় গ্রুপ (রোটেটিং ক্রেডিট)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> প্রতিবেশীরা একসাথে টাকা জমায়, প্রতি মাসে একজন সদস্য সব টাকা পায় (ব্যবসা/জরুরি কাজের জন্য)।
+                            </p>
+                            <div class="bg-cyan-50 p-2 rounded text-xs text-cyan-700">
+                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ১ সপ্তাহ | <strong>ফলাফল:</strong> স্থানীয় অর্থনীতি শক্তিশালী, ঋণের সুবিধা
+                            </div>
+                        </div>
+
+                        <!-- Solution 9: Volunteer Community Patrols -->
+                        <div class="bg-white p-5 rounded-xl border-2 border-red-200 shadow-sm hover:shadow-md transition-shadow relative">
+                            <div class="absolute top-2 right-2">
+                                <span class="badge-model text-xs">পরিকল্পিত</span>
+                            </div>
+                            <div class="text-2xl mb-3">👮</div>
+                            <div class="font-bold text-red-800 text-sm mb-2">৯. স্বেচ্ছাসেবী সম্প্রদায় পেট্রোল (ফিলিপাইন মডেল)</div>
+                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                                <strong>কি:</strong> স্থানীয় স্বেচ্ছাসেবীরা রাতে পাড়া পেট্রোল করে, নিরাপত্তা বাড়ায়, পুলিশের কাজ কমায়।
+                            </p>
+                            <div class="bg-red-50 p-2 rounded text-xs text-red-700">
+                                <strong>খরচ:</strong> ~৳ ৫ লক্ষ (টর্চ, জ্যাকেট) | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ৩০% অপরাধ কম, সম্প্রদায় বন্ধন
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-white rounded-lg border border-emerald-200">
+                        <div class="font-bold text-emerald-800 text-sm mb-2">💡 কেন এগুলো কাজ করে?</div>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            সারা বিশ্বে দেখা গেছে - যখন নাগরিকরা সরাসরি অংশ নেয়, খরচ কমে যায় কিন্তু কাজের মান বাড়ে। এগুলো শুরু করতে বড় বিনিয়োগ লাগে না, কিন্তু দীর্ঘমেয়াদে বড় পরিবর্তন আনে। সবচেয়ে বড় কথা - এগুলো স্থানীয় সম্প্রদায়কে শক্তিশালী করে, যা টেকসই উন্নয়নের ভিত্তি।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: PROGRESS TRACKER -->
+            <section id="tab-progress" class="space-y-8 hidden animate-fade-in">
+                <header class="mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">অগ্রগতি ট্র্যাকার: মডেল গড়ে তোলার যাত্রা</h2>
+                        <span class="badge-ready">লাইভ</span>
+                    </div>
+                    <p class="text-slate-600 mt-2 text-sm lg:text-base leading-relaxed">
+                        মডেল পৌরসভা গড়ে তোলার প্রতিটি পদক্ষেপের অগ্রগতি এখানে দেখানো হচ্ছে। আমরা কোথায় আছি, কোথায় যাচ্ছি - সব খোলামেলা।
+                    </p>
+                </header>
+
+                <!-- Overall Progress -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-teal-600 pl-3">সামগ্রিক অগ্রগতি</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">মডেল পৌরসভা গড়ে তোলা</span>
+                                <span class="text-sm font-bold text-teal-600">০%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-4">
+                                <div class="bg-gradient-to-r from-teal-500 to-emerald-500 h-4 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">পরিকল্পনা পর্যায়ে - ২০২৬ সালে শুরু হবে</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">আর্থিক স্বাবলম্বিতা</span>
+                                <span class="text-sm font-bold text-blue-600">০%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-4">
+                                <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-4 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">পরিকল্পনা পর্যায়ে</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">ডিজিটাল রূপান্তর</span>
+                                <span class="text-sm font-bold text-purple-600">০%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-4">
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">পরিকল্পনা পর্যায়ে</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">প্রতিলিপি প্রস্তুতি</span>
+                                <span class="text-sm font-bold text-amber-600">০%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-4">
+                                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-4 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">পরিকল্পনা পর্যায়ে</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milestone Timeline -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-600 pl-3">মাইলফলক টাইমলাইন</h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">১</div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800">Q1 2026: মডেল পৌরসভা উদ্যোগ শুরু</div>
+                                <p class="text-sm text-slate-600 mt-1">ভিশন ও মিশন নির্ধারণ, পরীক্ষার পরিকল্পনা তৈরি</p>
+                                <div class="text-xs text-blue-600 mt-2">📅 পরিকল্পিত</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 rounded-full bg-slate-300 flex items-center justify-center text-slate-600 font-bold">২</div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800">Q2 2026: প্রথম পরীক্ষা শুরু</div>
+                                <p class="text-sm text-slate-600 mt-1">নাগরিক রিপোর্টিং অ্যাপ, "আমার রাস্তা" প্রোগ্রাম চালু</p>
+                                <div class="text-xs text-slate-400 mt-2">📅 পরিকল্পিত</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 rounded-full bg-slate-300 flex items-center justify-center text-slate-600 font-bold">৩</div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800">Q3 2026: প্রথম সফলতা</div>
+                                <p class="text-sm text-slate-600 mt-1">২+ পরীক্ষা সফল, নথিভুক্তকরণ শুরু</p>
+                                <div class="text-xs text-slate-400 mt-2">📅 পরিকল্পিত</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 rounded-full bg-slate-300 flex items-center justify-center text-slate-600 font-bold">৪</div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800">Q4 2026: প্রতিলিপি প্রস্তুতি</div>
+                                <p class="text-sm text-slate-600 mt-1">সফল পরীক্ষাগুলোর জন্য গাইডলাইন তৈরি, অন্যান্য পৌরসভার সাথে শেয়ার</p>
+                                <div class="text-xs text-slate-400 mt-2">📅 পরিকল্পিত</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement Badges -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-300 shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-amber-600 pl-3">অর্জনসমূহ</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-lg text-center border border-amber-200 opacity-50">
+                            <div class="text-3xl mb-2">🏆</div>
+                            <div class="text-xs font-bold text-slate-500">মডেল উদ্যোগ</div>
+                            <div class="text-xs text-slate-400 mt-1">পরিকল্পিত</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center border border-amber-200 opacity-50">
+                            <div class="text-3xl mb-2">📱</div>
+                            <div class="text-xs font-bold text-slate-500">ডিজিটাল</div>
+                            <div class="text-xs text-slate-400 mt-1">পরিকল্পিত</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center border border-amber-200 opacity-50">
+                            <div class="text-3xl mb-2">🔄</div>
+                            <div class="text-xs font-bold text-slate-500">প্রতিলিপি</div>
+                            <div class="text-xs text-slate-400 mt-1">লক করা</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center border border-amber-200 opacity-50">
+                            <div class="text-3xl mb-2">🌟</div>
+                            <div class="text-xs font-bold text-slate-500">জাতীয় স্বীকৃতি</div>
+                            <div class="text-xs text-slate-400 mt-1">লক করা</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: REPLICATION FRAMEWORK -->
+            <section id="tab-replication" class="space-y-8 hidden animate-fade-in">
+                <header class="mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">প্রতিলিপি কাঠামো: অন্য পৌরসভাগুলো কিভাবে শিখবে</h2>
+                        <span class="badge-ready">প্রস্তুত</span>
+                    </div>
+                    <p class="text-slate-600 mt-2 text-sm lg:text-base leading-relaxed">
+                        আমরা যা শিখছি, তা অন্য পৌরসভাগুলোর সাথে শেয়ার করছি। এখানে আছে ধাপে ধাপে গাইড, রিসোর্স, এবং সবকিছু যা অন্য পৌরসভাগুলো আমাদের মডেল গ্রহণ করতে সাহায্য করবে।
+                    </p>
+                </header>
+
+                <!-- Step-by-Step Guide -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-600 pl-3">ধাপে ধাপে গাইড</h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">১</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">ভিত্তি তৈরি করুন</div>
+                                <p class="text-sm text-slate-600">আপনার পৌরসভার বর্তমান অবস্থা বুঝুন - আয়, ব্যয়, চ্যালেঞ্জ। আমাদের অডিট টুল ব্যবহার করুন।</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-teal-500 text-white flex items-center justify-center font-bold">২</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">একটি পরীক্ষা বেছে নিন</div>
+                                <p class="text-sm text-slate-600">আমাদের সফল পরীক্ষাগুলোর মধ্যে থেকে আপনার পৌরসভার জন্য উপযুক্ত একটি বেছে নিন।</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">৩</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">পরিকল্পনা করুন</div>
+                                <p class="text-sm text-slate-600">আমাদের টেমপ্লেট ব্যবহার করে আপনার পরিকল্পনা তৈরি করুন। খরচ, সময়, প্রয়োজনীয় সম্পদ নির্ধারণ করুন।</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">৪</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">শুরু করুন</div>
+                                <p class="text-sm text-slate-600">ছোট করে শুরু করুন। একটি ওয়ার্ড বা এলাকা দিয়ে শুরু করুন, তারপর সম্প্রসারণ করুন।</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold">৫</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">মাপুন এবং শিখুন</div>
+                                <p class="text-sm text-slate-600">ফলাফল ট্র্যাক করুন। কি কাজ করছে, কি করছে না - সব নথিভুক্ত করুন।</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold">৬</div>
+                            <div class="flex-grow">
+                                <div class="font-bold text-slate-800 mb-2">শেয়ার করুন</div>
+                                <p class="text-sm text-slate-600">আপনার অভিজ্ঞতা অন্য পৌরসভাগুলোর সাথে শেয়ার করুন। আমরা সবাই একসাথে শিখছি।</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource Toolkit -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border-2 border-blue-300 shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-600 pl-3">রিসোর্স টুলকিট</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-lg border border-blue-200">
+                            <div class="text-2xl mb-2">📋</div>
+                            <div class="font-bold text-blue-800 mb-2">পরিকল্পনা টেমপ্লেট</div>
+                            <p class="text-xs text-slate-600 mb-3">প্রতিটি পরীক্ষার জন্য বিস্তারিত পরিকল্পনা টেমপ্লেট</p>
+                            <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ডাউনলোড</button>
+                        </div>
+                        <div class="bg-white p-5 rounded-lg border border-blue-200">
+                            <div class="text-2xl mb-2">📊</div>
+                            <div class="font-bold text-blue-800 mb-2">মাপকাঠি টুল</div>
+                            <p class="text-xs text-slate-600 mb-3">আপনার অগ্রগতি ট্র্যাক করার জন্য মেট্রিক্স</p>
+                            <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ডাউনলোড</button>
+                        </div>
+                        <div class="bg-white p-5 rounded-lg border border-blue-200">
+                            <div class="text-2xl mb-2">📝</div>
+                            <div class="font-bold text-blue-800 mb-2">নথিভুক্তকরণ গাইড</div>
+                            <p class="text-xs text-slate-600 mb-3">কিভাবে সঠিকভাবে নথিভুক্ত করবেন</p>
+                            <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ডাউনলোড</button>
+                        </div>
+                        <div class="bg-white p-5 rounded-lg border border-blue-200">
+                            <div class="text-2xl mb-2">✅</div>
+                            <div class="font-bold text-blue-800 mb-2">চেকলিস্ট</div>
+                            <p class="text-xs text-slate-600 mb-3">প্রতিটি ধাপের জন্য চেকলিস্ট</p>
+                            <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">ডাউনলোড</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Checklist -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-green-600 pl-3">বাস্তবায়ন চেকলিস্ট</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">আপনার পৌরসভার বর্তমান অবস্থা মূল্যায়ন করুন</div>
+                                <div class="text-xs text-slate-600">আয়, ব্যয়, চ্যালেঞ্জ, সুযোগ - সব বুঝুন</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">একটি পরীক্ষা বেছে নিন</div>
+                                <div class="text-xs text-slate-600">আপনার পরিস্থিতির জন্য সবচেয়ে উপযুক্ত</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">স্টেকহোল্ডারদের সাথে আলোচনা করুন</div>
+                                <div class="text-xs text-slate-600">নাগরিক, ব্যবসায়ী, কর্মচারী - সবাইকে নিয়ে আসুন</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">ছোট করে শুরু করুন</div>
+                                <div class="text-xs text-slate-600">একটি ওয়ার্ড বা এলাকা দিয়ে শুরু করুন</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">ফলাফল ট্র্যাক করুন</div>
+                                <div class="text-xs text-slate-600">নিয়মিত মাপুন এবং মূল্যায়ন করুন</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="mt-1">
+                            <div>
+                                <div class="font-bold text-sm text-slate-800">শিখে নেওয়া শেয়ার করুন</div>
+                                <div class="text-xs text-slate-600">সফলতা এবং ব্যর্থতা - সব শেয়ার করুন</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: NATIONAL IMPACT -->
+            <section id="tab-impact" class="space-y-8 hidden animate-fade-in">
+                <header class="mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">জাতীয় প্রভাব: সারা দেশে ছড়িয়ে দেওয়া</h2>
+                        <span class="badge-national">জাতীয়</span>
+                    </div>
+                    <p class="text-slate-600 mt-2 text-sm lg:text-base leading-relaxed">
+                        ঝালকাঠি মডেল পৌরসভা শুধু আমাদের জন্য নয় - এটি সারা বাংলাদেশের জন্য একটি উদাহরণ। এখানে দেখানো হচ্ছে কিভাবে আমাদের পরীক্ষা জাতীয় নীতিতে প্রভাব ফেলতে পারে।
+                    </p>
+                </header>
+
+                <!-- Policy Influence Tracker -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-red-600 pl-3">নীতি প্রভাব ট্র্যাকার</h3>
+                    <div class="space-y-4">
+                        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                            <div class="font-bold text-red-800 mb-2">স্থানীয় সরকার নীতি</div>
+                            <p class="text-sm text-slate-700">আমাদের মডেল স্থানীয় সরকার মন্ত্রণালয়ের নীতিতে প্রভাব ফেলতে পারে</p>
+                            <div class="text-xs text-red-600 mt-2">🔄 পর্যালোচনাধীন</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <div class="font-bold text-blue-800 mb-2">আর্থিক স্বাবলম্বিতা নির্দেশিকা</div>
+                            <p class="text-sm text-slate-700">নিজস্ব আয় বৃদ্ধির কৌশলগুলো জাতীয় নির্দেশিকায় অন্তর্ভুক্ত হতে পারে</p>
+                            <div class="text-xs text-blue-600 mt-2">📋 প্রস্তাবিত</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <div class="font-bold text-green-800 mb-2">ডিজিটাল রূপান্তর</div>
+                            <p class="text-sm text-slate-700">আমাদের E-সেবা মডেল "ডিজিটাল বাংলাদেশ" উদ্যোগে অন্তর্ভুক্ত হতে পারে</p>
+                            <div class="text-xs text-green-600 mt-2">✓ বিবেচনাধীন</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Municipalities Adopting -->
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border-2 border-emerald-300 shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-emerald-600 pl-3">অন্যান্য পৌরসভা যারা মডেল গ্রহণ করছে</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-emerald-200">
+                            <div class="font-bold text-emerald-800 mb-2">বরিশাল পৌরসভা</div>
+                            <p class="text-xs text-slate-600 mb-2">নাগরিক রিপোর্টিং অ্যাপ</p>
+                            <div class="text-xs text-emerald-600">🔄 পরিকল্পনাধীন</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-emerald-200">
+                            <div class="font-bold text-emerald-800 mb-2">পটুয়াখালী পৌরসভা</div>
+                            <p class="text-xs text-slate-600 mb-2">"আমার রাস্তা" প্রোগ্রাম</p>
+                            <div class="text-xs text-emerald-600">🔄 পরিকল্পনাধীন</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-emerald-200">
+                            <div class="font-bold text-emerald-800 mb-2">ভোলা পৌরসভা</div>
+                            <p class="text-xs text-slate-600 mb-2">সম্প্রদায় বাগান</p>
+                            <div class="text-xs text-emerald-600">🔄 পরিকল্পনাধীন</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scaling Potential -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-purple-600 pl-3">স্কেলিং সম্ভাবনা</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">বাংলাদেশের মোট পৌরসভা</span>
+                                <span class="text-sm font-bold text-purple-600">৩৩৩</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3">
+                                <div class="bg-purple-500 h-3 rounded-full" style="width: 0.3%"></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">ঝালকাঠি: ১টি (০.৩%)</div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-bold text-slate-700">প্রথম শ্রেণির পৌরসভা</span>
+                                <span class="text-sm font-bold text-blue-600">৫০+</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3">
+                                <div class="bg-blue-500 h-3 rounded-full" style="width: 2%"></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">ঝালকাঠি: ১টি (২%)</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-200 mt-4">
+                            <div class="font-bold text-purple-800 mb-2">🎯 লক্ষ্য</div>
+                            <p class="text-sm text-slate-700">২০২৭ সালের মধ্যে ১০+ পৌরসভা আমাদের মডেল গ্রহণ করবে, এবং ২০২৮ সালের মধ্যে এটি জাতীয় নীতিতে অন্তর্ভুক্ত হবে।</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Coverage -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-300 shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-amber-600 pl-3">মিডিয়া কভারেজ ও স্বীকৃতি</h3>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 opacity-50">
+                            <div class="font-bold text-slate-500 text-sm">"ঝালকাঠি: মডেল পৌরসভার পথে"</div>
+                            <div class="text-xs text-slate-400 mt-1">আসছে</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 opacity-50">
+                            <div class="font-bold text-slate-500 text-sm">"কম খরচে বড় সমাধান: ঝালকাঠির অভিজ্ঞতা"</div>
+                            <div class="text-xs text-slate-400 mt-1">আসছে</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 opacity-50">
+                            <div class="font-bold text-slate-500 text-sm">জাতীয় স্বীকৃতি</div>
+                            <div class="text-xs text-slate-400 mt-1">ভিশন ২০২৬/২৭</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="tab-about" class="space-y-6 hidden animate-fade-in">
                 <header class="mb-8 border-b border-slate-200 pb-4">
                     <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">পৌরসভা পরিচিতি ও পরিসংখ্যান</h2>
@@ -771,7 +1482,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                    </div>
 
                 <!-- Pillar 4: Institutional Capacity Building -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
@@ -796,132 +1507,53 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                    </div>
 
-                <!-- Low-Cost, High-Impact Solutions -->
-                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-300 shadow-lg p-6">
+                <!-- Replicability & Scaling Potential -->
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-300 shadow-lg p-6">
                     <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">💡</div>
+                        <div class="text-4xl mr-4">🔄</div>
                         <div>
-                            <h3 class="text-2xl font-bold text-slate-800">নিম্ন খরচে বড় সমাধান: বিশ্বের সফল উদাহরণ</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed mt-2">সারা বিশ্বে যেসব শহর কম টাকায় বড় পরিবর্তন এনেছে, তাদের থেকে শেখা। এগুলো দ্রুত শুরু করা যায়, খরচ কম, কিন্তু প্রভাব অনেক বড়।</p>
+                            <h3 class="text-2xl font-bold text-slate-800">প্রতিলিপিযোগ্যতা ও স্কেলিং সম্ভাবনা</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-2">এই কৌশলগুলো শুধু ঝালকাঠির জন্য নয় - সারা বাংলাদেশের যেকোনো পৌরসভা এগুলো গ্রহণ করতে পারে। প্রতিটি কৌশলের জন্য আমরা বিস্তারিত গাইড তৈরি করছি।</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Solution 1: Citizen Reporting App -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-emerald-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">📱</div>
-                            <div class="font-bold text-emerald-800 text-sm mb-2">১. নাগরিক রিপোর্টিং অ্যাপ (FixMyStreet মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> যুক্তরাজ্যের মতো একটি সহজ মোবাইল অ্যাপ যেখানে নাগরিকরা সমস্যা (ড্রেনেজ, রাস্তা, আলো) রিপোর্ট করতে পারে।
-                            </p>
-                            <div class="bg-emerald-50 p-2 rounded text-xs text-emerald-700">
-                                <strong>খরচ:</strong> ~৳ ৫ লক্ষ (একবার) | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> ৫০% বেশি সমস্যা চিহ্নিত, দ্রুত সমাধান
-                            </div>
-                        </div>
-
-                        <!-- Solution 2: Adopt-a-Street Program -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-blue-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">🤝</div>
-                            <div class="font-bold text-blue-800 text-sm mb-2">২. "আমার রাস্তা" প্রোগ্রাম (Adopt-a-Street)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> স্থানীয় ব্যবসায়ী বা পরিবার একটি রাস্তার দায়িত্ব নেয় - পরিষ্কার, আলো, গাছপালা।
-                            </p>
-                            <div class="bg-blue-50 p-2 rounded text-xs text-blue-700">
-                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ৩০% রক্ষণাবেক্ষণ খরচ কম, সম্প্রদায়ের অংশগ্রহণ
-                            </div>
-                        </div>
-
-                        <!-- Solution 3: Waste Picker Cooperatives -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-amber-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">♻️</div>
-                            <div class="font-bold text-amber-800 text-sm mb-2">৩. বর্জ্য সংগ্রাহক কোঅপারেটিভ (ব্রাজিল মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> অনানুষ্ঠানিক বর্জ্য সংগ্রাহকদের সংগঠিত করে কোঅপারেটিভ তৈরি। তারা পুনর্ব্যবহারযোগ্য জিনিস বিক্রি করে আয় করে।
-                            </p>
-                            <div class="bg-amber-50 p-2 rounded text-xs text-amber-700">
-                                <strong>খরচ:</strong> ~৳ ১০ লক্ষ (শুরুতে) | <strong>সময়:</strong> ৩ মাস | <strong>ফলাফল:</strong> ৪০% বর্জ্য কম, ২০০+ কাজের সুযোগ
-                            </div>
-                        </div>
-
-                        <!-- Solution 4: Community Gardens -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-green-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">🌱</div>
-                            <div class="font-bold text-green-800 text-sm mb-2">৪. সম্প্রদায় বাগান (ডেট্রয়েট মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> খালি জায়গায় সম্প্রদায় সবজি বাগান। স্থানীয়রা নিজেরাই দেখাশোনা করে, সবজি বিক্রি করে আয় করে।
-                            </p>
-                            <div class="bg-green-50 p-2 rounded text-xs text-green-700">
-                                <strong>খরচ:</strong> ~৳ ২ লক্ষ/বাগান | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> খাদ্য নিরাপত্তা, আয়, সবুজ স্থান
-                            </div>
-                        </div>
-
-                        <!-- Solution 5: Public Space Advertising -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-purple-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">📢</div>
-                            <div class="font-bold text-purple-800 text-sm mb-2">৫. পাবলিক স্পেস বিজ্ঞাপন (নিউ ইয়র্ক মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> বাস স্টপ, রাস্তার পোস্ট, সাইক্লোন শেল্টারে বিজ্ঞাপনের জায়গা ভাড়া দেওয়া।
-                            </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-xl border border-purple-200">
+                            <div class="font-bold text-purple-800 mb-2">💰 আর্থিক স্বাবলম্বিতা</div>
+                            <p class="text-xs text-slate-700 mb-3">GIS-ভিত্তিক কর পুনঃমূল্যায়ন, সম্পদ মুনাফাকরণ, পানি মিটারিং - সব পৌরসভার জন্য প্রযোজ্য</p>
                             <div class="bg-purple-50 p-2 rounded text-xs text-purple-700">
-                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ~৳ ১-২ কোটি/বছর আয়
+                                <strong>প্রতিলিপি প্রস্তুতি:</strong> ৮০% | <strong>স্কেলিং সম্ভাবনা:</strong> ৩৩৩ পৌরসভা
                             </div>
                         </div>
-
-                        <!-- Solution 6: Time Bank / Skill Exchange -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-pink-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">⏰</div>
-                            <div class="font-bold text-pink-800 text-sm mb-2">৬. সময় ব্যাংক (জাপান/যুক্তরাজ্য মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> মানুষ তাদের দক্ষতা (ইংরেজি, কম্পিউটার, মেরামত) শেয়ার করে, সময়ের বিনিময়ে অন্য সেবা পায়।
-                            </p>
-                            <div class="bg-pink-50 p-2 rounded text-xs text-pink-700">
-                                <strong>খরচ:</strong> ~৳ ৩ লক্ষ (সফটওয়্যার) | <strong>সময়:</strong> ১ মাস | <strong>ফলাফল:</strong> বিনামূল্যে দক্ষতা উন্নয়ন, সম্প্রদায় বন্ধন
+                        <div class="bg-white p-5 rounded-xl border border-purple-200">
+                            <div class="font-bold text-purple-800 mb-2">🌿 নীল-সবুজ অবকাঠামো</div>
+                            <p class="text-xs text-slate-700 mb-3">জোয়ার-প্রতিরোধী ড্রেনেজ, রিভারফ্রন্ট উন্নয়ন - উপকূলীয় পৌরসভাগুলোর জন্য বিশেষভাবে প্রযোজ্য</p>
+                            <div class="bg-purple-50 p-2 rounded text-xs text-purple-700">
+                                <strong>প্রতিলিপি প্রস্তুতি:</strong> ৭০% | <strong>স্কেলিং সম্ভাবনা:</strong> ৫০+ উপকূলীয় পৌরসভা
                             </div>
                         </div>
-
-                        <!-- Solution 7: Micro-Entrepreneurship for Services -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-indigo-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">🚀</div>
-                            <div class="font-bold text-indigo-800 text-sm mb-2">৭. মাইক্রো-উদ্যোক্তা প্রোগ্রাম (কেনিয়া মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> তরুণদের ছোট ব্যবসা শুরু করতে সাহায্য (মোবাইল রিচার্জ, কুরিয়ার, ডিজিটাল সেবা) - পৌরসভা প্রথম গ্রাহক।
-                            </p>
-                            <div class="bg-indigo-50 p-2 rounded text-xs text-indigo-700">
-                                <strong>খরচ:</strong> ~৳ ২০ লক্ষ (ঋণ) | <strong>সময়:</strong> ২ মাস | <strong>ফলাফল:</strong> ১০০+ কাজ, স্থানীয় সেবা উন্নতি
+                        <div class="bg-white p-5 rounded-xl border border-purple-200">
+                            <div class="font-bold text-purple-800 mb-2">💻 প্রশাসনিক আধুনিকীকরণ</div>
+                            <p class="text-xs text-slate-700 mb-3">E-সেবা, ক্রয় স্বচ্ছতা - সব পৌরসভার জন্য প্রযোজ্য, বিশেষ করে উচ্চ শিক্ষার হারযুক্ত এলাকায়</p>
+                            <div class="bg-purple-50 p-2 rounded text-xs text-purple-700">
+                                <strong>প্রতিলিপি প্রস্তুতি:</strong> ৯০% | <strong>স্কেলিং সম্ভাবনা:</strong> ২০০+ পৌরসভা
                             </div>
                         </div>
-
-                        <!-- Solution 8: Community Savings Groups -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-cyan-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">💰</div>
-                            <div class="font-bold text-cyan-800 text-sm mb-2">৮. সম্প্রদায় সঞ্চয় গ্রুপ (রোটেটিং ক্রেডিট)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> প্রতিবেশীরা একসাথে টাকা জমায়, প্রতি মাসে একজন সদস্য সব টাকা পায় (ব্যবসা/জরুরি কাজের জন্য)।
-                            </p>
-                            <div class="bg-cyan-50 p-2 rounded text-xs text-cyan-700">
-                                <strong>খরচ:</strong> প্রায় শূন্য | <strong>সময়:</strong> ১ সপ্তাহ | <strong>ফলাফল:</strong> স্থানীয় অর্থনীতি শক্তিশালী, ঋণের সুবিধা
-                            </div>
-                        </div>
-
-                        <!-- Solution 9: Volunteer Community Patrols -->
-                        <div class="bg-white p-5 rounded-xl border-2 border-red-200 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="text-2xl mb-3">👮</div>
-                            <div class="font-bold text-red-800 text-sm mb-2">৯. স্বেচ্ছাসেবী সম্প্রদায় পেট্রোল (ফিলিপাইন মডেল)</div>
-                            <p class="text-xs text-slate-700 mb-3 leading-relaxed">
-                                <strong>কি:</strong> স্থানীয় স্বেচ্ছাসেবীরা রাতে পাড়া পেট্রোল করে, নিরাপত্তা বাড়ায়, পুলিশের কাজ কমায়।
-                            </p>
-                            <div class="bg-red-50 p-2 rounded text-xs text-red-700">
-                                <strong>খরচ:</strong> ~৳ ৫ লক্ষ (টর্চ, জ্যাকেট) | <strong>সময়:</strong> ২ সপ্তাহ | <strong>ফলাফল:</strong> ৩০% অপরাধ কম, সম্প্রদায় বন্ধন
+                        <div class="bg-white p-5 rounded-xl border border-purple-200">
+                            <div class="font-bold text-purple-800 mb-2">👥 প্রাতিষ্ঠানিক সক্ষমতা</div>
+                            <p class="text-xs text-slate-700 mb-3">কর্মী প্রশিক্ষণ, স্বাস্থ্য বিভাগ উন্নয়ন - সব পৌরসভার জন্য প্রযোজ্য</p>
+                            <div class="bg-purple-50 p-2 rounded text-xs text-purple-700">
+                                <strong>প্রতিলিপি প্রস্তুতি:</strong> ৭৫% | <strong>স্কেলিং সম্ভাবনা:</strong> ৩৩৩ পৌরসভা
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 p-4 bg-white rounded-lg border border-emerald-200">
-                        <div class="font-bold text-emerald-800 text-sm mb-2">💡 কেন এগুলো কাজ করে?</div>
+                    <div class="mt-6 p-4 bg-white rounded-lg border border-purple-200">
+                        <div class="font-bold text-purple-800 text-sm mb-2">📝 নথিভুক্তকরণ</div>
                         <p class="text-xs text-slate-700 leading-relaxed">
-                            সারা বিশ্বে দেখা গেছে - যখন নাগরিকরা সরাসরি অংশ নেয়, খরচ কমে যায় কিন্তু কাজের মান বাড়ে। এগুলো শুরু করতে বড় বিনিয়োগ লাগে না, কিন্তু দীর্ঘমেয়াদে বড় পরিবর্তন আনে। সবচেয়ে বড় কথা - এগুলো স্থানীয় সম্প্রদায়কে শক্তিশালী করে, যা টেকসই উন্নয়নের ভিত্তি।
+                            প্রতিটি কৌশলের জন্য আমরা বিস্তারিত গাইড, টেমপ্লেট, এবং চেকলিস্ট তৈরি করছি যাতে অন্য পৌরসভাগুলো সহজেই আমাদের থেকে শিখতে পারে। <a href="#tab-replication" onclick="switchTab('replication')" class="text-purple-600 hover:underline">প্রতিলিপি কাঠামো দেখুন</a>
                         </p>
                     </div>
                 </div>
@@ -963,7 +1595,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                    </div>
                 </div>
             </section>
 
@@ -1163,15 +1795,28 @@
         
         <!-- FOOTER -->
         <footer class="bg-white border-t border-slate-200 py-6 mt-auto w-full">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 mb-4">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
-                    <p class="font-bold text-slate-700">Jhalakathi Strategic Reconstruction Framework</p>
-                    <p class="text-xs mt-1">Developed for Municipal Analysis & Planning</p>
+                        <p class="font-bold text-slate-700 flex items-center gap-2">
+                            <span>ঝালকাঠি মডেল পৌরসভা উদ্যোগ</span>
+                            <span class="badge-model text-xs">মডেল</span>
+                        </p>
+                        <p class="text-xs mt-1">বাংলাদেশের প্রথম প্রতিলিপিযোগ্য মডেল পৌরসভা</p>
                 </div>
                 <div class="text-center md:text-right">
                     <p>Data Sources: Budget Speech 2024-25, BBS Census 2011/22</p>
                     <p class="text-xs mt-1"><a href="https://docs.google.com/document/d/1WVTD2SdbJqK9gaHm5VouzWoStWPMrd6V6HLTMEd5g1w/edit?usp=sharing" class="text-teal-600 hover:underline" target="_blank">Master Whitepaper</a></p>
-                    <p class="text-xs mt-1">&copy; 2025 Strategic Planning Unit</p>
+                        <p class="text-xs mt-1">&copy; 2025 Model Municipality Initiative</p>
+                    </div>
+                </div>
+                <div class="border-t border-slate-200 pt-4 text-center">
+                    <p class="text-xs text-slate-600 mb-2">অন্যান্য পৌরসভা যারা আমাদের মডেল গ্রহণ করতে আগ্রহী, তারা আমাদের সাথে যোগাযোগ করতে পারেন</p>
+                    <p class="text-xs">
+                        <a href="mailto:info@jhalokathimunicipality.gov.bd" class="text-teal-600 hover:underline">যোগাযোগ করুন</a> | 
+                        <a href="#tab-replication" onclick="switchTab('replication')" class="text-teal-600 hover:underline">প্রতিলিপি কাঠামো দেখুন</a> | 
+                        <a href="#tab-impact" onclick="switchTab('impact')" class="text-teal-600 hover:underline">জাতীয় প্রভাব</a>
+                    </p>
                 </div>
             </div>
         </footer>
@@ -1194,7 +1839,8 @@
 
         // --- NAVIGATION ---
         function switchTab(tabId) {
-            ['overview', 'about', 'audit', 'strategy', 'simulator', 'sources'].forEach(id => {
+            const allTabs = ['vision', 'overview', 'experiments', 'progress', 'replication', 'impact', 'audit', 'strategy', 'simulator', 'sources', 'about'];
+            allTabs.forEach(id => {
                 const tab = document.getElementById('tab-' + id);
                 const btn = document.getElementById('btn-' + id);
                 if(tab) tab.classList.add('hidden');
@@ -1204,7 +1850,8 @@
                 }
             });
 
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const targetTab = document.getElementById('tab-' + tabId);
+            if(targetTab) targetTab.classList.remove('hidden');
             const btn = document.getElementById('btn-' + tabId);
             if(btn) {
                 btn.classList.add('active', 'bg-slate-800', 'text-white');
@@ -1224,6 +1871,8 @@
             if(tabId === 'audit' && !auditIncomeChart) initAuditCharts();
             if(tabId === 'simulator' && !simChart) initSimChart();
             if(tabId === 'about' && !aboutDemographicsChart) initAboutCharts();
+            if(tabId === 'progress' && !progressChart) initProgressCharts();
+            if(tabId === 'impact' && !impactChart) initImpactCharts();
         }
 
         // --- CHART CONFIG ---
@@ -1233,6 +1882,7 @@
 
         let historyChart, aboutDemographicsChart, aboutLiteracyChart, auditIncomeChart, ownIncomeDetailChart, detailedExpenseChart, simChart;
         let timelineChart, overviewDemographicsChart, overviewLiteracyChart, overviewIncomeChart, overviewExpenseChart, infrastructureChart, riskMatrixChart;
+        let progressChart, impactChart;
 
         function initHistoryChart() {
             const ctx = document.getElementById('historyChart').getContext('2d');
@@ -1683,6 +2333,16 @@
             document.getElementById('rng-admin').value = 0;
             document.getElementById('rng-waste').value = 0;
             updateSim();
+        }
+
+        function initProgressCharts() {
+            // Progress tracking charts will be initialized here
+            // Currently using static progress bars, can be enhanced with dynamic charts
+        }
+
+        function initImpactCharts() {
+            // Impact metrics charts will be initialized here
+            // Currently using static progress bars, can be enhanced with dynamic charts
         }
 
         document.addEventListener('DOMContentLoaded', () => {
