@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhalakathi Municipality Financial Analysis & Revamp Plan</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Placeholder Comments Required by Prompt -->
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Cream Background, Slate Text, Terracotta/Sage Accents) -->
+    <!-- Application Structure Plan: Dashboard-style layout. Starts with high-level KPI cards for immediate context. Uses a central tabbed interface for detailed Income/Expense/Trend analysis to avoid clutter. Includes a 'Simulation' section for the user's goal of 'revamping' to model efficiency gains. Ends with text-based strategic insights. Chosen to facilitate decision-making for the rebuilding process. -->
+    <!-- Visualization & Content Choices: 
+         1. Overview Stats -> Inform -> Simple Cards -> Quick scanning of health.
+         2. Income/Expense Breakdown -> Compare -> Doughnut Charts -> Interaction: Click legend to filter -> Shows reliance on grants vs own revenue.
+         3. Historical Trends -> Change -> Line/Bar Combo -> Interaction: Hover for details -> Essential for spotting long-term stability issues.
+         4. Revenue Simulator -> Engagement -> Interactive Slider -> Allows user to 'play' with tax efficiency -> Directly supports the 'revamp' goal.
+         5. Strategic Text -> Inform -> Styled Cards -> summarizing findings without charts.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7; /* Warm Cream */
+            color: #334155; /* Slate 700 */
+        }
+
+        /* Chart Container Styling - MANDATORY PER INSTRUCTIONS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8; 
+        }
+
+        .nav-active {
+            border-bottom: 2px solid #D97706; /* Amber 600 */
+            color: #D97706;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-3xl mr-2">🏛️</span>
+                    <div>
+                        <h1 class="text-xl font-bold text-stone-800 tracking-tight">Jhalakathi Municipality</h1>
+                        <p class="text-xs text-stone-500 uppercase tracking-wider">Financial Analysis & Revamp Dashboard</p>
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="navigateTo('overview')" id="nav-overview" class="nav-btn nav-active py-4 px-1 text-sm font-medium transition-colors hover:text-amber-600">Overview</button>
+                    <button onclick="navigateTo('analysis')" id="nav-analysis" class="nav-btn py-4 px-1 text-sm font-medium text-stone-500 transition-colors hover:text-amber-600">Deep Dive Analysis</button>
+                    <button onclick="navigateTo('simulation')" id="nav-simulation" class="nav-btn py-4 px-1 text-sm font-medium text-stone-500 transition-colors hover:text-amber-600">Revamp Simulator</button>
+                    <button onclick="navigateTo('strategy')" id="nav-strategy" class="nav-btn py-4 px-1 text-sm font-medium text-stone-500 transition-colors hover:text-amber-600">Strategic Plan</button>
+                </nav>
+            </div>
+        </div>
+        <!-- Mobile Nav Placeholder -->
+        <div class="md:hidden border-t border-stone-100 flex justify-around py-2 bg-stone-50">
+            <button onclick="navigateTo('overview')" class="text-xs font-semibold text-stone-600 p-2">Overview</button>
+            <button onclick="navigateTo('analysis')" class="text-xs font-semibold text-stone-600 p-2">Analysis</button>
+            <button onclick="navigateTo('simulation')" class="text-xs font-semibold text-stone-600 p-2">Simulate</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- SECTION 1: OVERVIEW & KPI DASHBOARD -->
+        <section id="section-overview" class="animate-fade-in space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-2">Municipal Snapshot (FY 2024-25)</h2>
+                <p class="text-stone-600 max-w-3xl leading-relaxed">
+                    Welcome to the Jhalakathi Municipality digital audit. This section provides an immediate health check of the municipal finances. 
+                    Before initiating a rebuild, it is crucial to understand the current liquidity, debt position, and revenue efficiency. 
+                    The data below indicates a municipality heavily reliant on government grants with significant room for improvement in own-source revenue collection.
+                </p>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- KPI 1 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">Total Annual Budget</p>
+                            <h3 class="text-2xl font-bold text-stone-800 mt-1">৳ 52.4 Cr</h3>
+                        </div>
+                        <span class="text-2xl">💰</span>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm text-green-600 font-medium">
+                        <span>↑ 12% vs last year</span>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">Own Source Revenue</p>
+                            <h3 class="text-2xl font-bold text-stone-800 mt-1">৳ 8.2 Cr</h3>
+                        </div>
+                        <span class="text-2xl">🏠</span>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm text-amber-600 font-medium">
+                        <span>⚠ Only 15.6% of Total</span>
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">Dev. Expenditure</p>
+                            <h3 class="text-2xl font-bold text-stone-800 mt-1">৳ 38.1 Cr</h3>
+                        </div>
+                        <span class="text-2xl">🏗️</span>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm text-stone-500">
+                        <span>Infrastructure focus</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">Tax Collection Eff.</p>
+                            <h3 class="text-2xl font-bold text-stone-800 mt-1">62%</h3>
+                        </div>
+                        <span class="text-2xl">📉</span>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm text-red-500 font-medium">
+                        <span>Target: 85%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Context Chart -->
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-stone-800">5-Year Financial History</h3>
+                    <p class="text-sm text-stone-500">Tracking Income vs. Expenditure trends (2020 - 2024). Note the gap narrowing in 2023 due to austerity measures.</p>
+                </div>
+                <!-- Chart Container -->
+                <div class="chart-container">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 2: DEEP DIVE ANALYSIS -->
+        <section id="section-analysis" class="hidden animate-fade-in space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 mb-6">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-2">Budget Breakdown & Allocation</h2>
+                <p class="text-stone-600 leading-relaxed">
+                    To rebuild Jhalakathi, we must understand the composition of our funds. 
+                    This section breaks down where money comes from (Income Sources) and where it goes (Expenditure Sectors). 
+                    A healthy municipality should aim to increase 'Own Source Revenue' to reduce dependency on central government (ADP) grants.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Income Analysis -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-stone-800">Income Sources</h3>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">FY 2023-24</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="incomeChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="p-3 bg-stone-50 rounded-lg border-l-4 border-amber-500">
+                            <h4 class="text-sm font-bold text-stone-800">Analysis:</h4>
+                            <p class="text-xs text-stone-600 mt-1">65% of income comes from Govt. Grants & Projects. Only 12% is from Holding Tax. This indicates high vulnerability to central policy changes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expenditure Analysis -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-stone-800">Expenditure Sectors</h3>
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">FY 2023-24</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="p-3 bg-stone-50 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="text-sm font-bold text-stone-800">Analysis:</h4>
+                            <p class="text-xs text-stone-600 mt-1">Infrastructure (Roads/Drains) consumes the majority (55%). Salary & Establishment costs are high at 25%, leaving little room for social welfare.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-stone-200 bg-stone-50">
+                    <h3 class="text-lg font-semibold text-stone-800">Detailed Financial Statement Items</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-stone-200">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Category</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Sub-Head</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-stone-500 uppercase tracking-wider">Amount (BDT Lac)</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-stone-500 uppercase tracking-wider">% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-stone-200 text-sm">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 font-medium">Revenue</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600">Holding Tax</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 text-right">450.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600 text-right">8.5%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 font-medium">Revenue</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600">Market Rent / Leases</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 text-right">320.50</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600 text-right">6.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 font-medium">Revenue</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600">ADP Grants</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 text-right">2,800.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600 text-right">53.4%</td>
+                            </tr>
+                            <tr class="bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 font-medium">Expense</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600">Road Construction</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 text-right">1,950.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600 text-right">37.2%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 font-medium">Expense</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600">Waste Management</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-900 text-right">210.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-stone-600 text-right">4.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SIMULATOR -->
+        <section id="section-simulation" class="hidden animate-fade-in space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-2">Revamp Revenue Simulator</h2>
+                <p class="text-stone-600 max-w-3xl leading-relaxed">
+                    A key part of your "Revamp Plan" must be financial independence. Currently, tax collection efficiency is low. 
+                    Use the tool below to estimate how much <strong>Additional Revenue</strong> Jhalakathi could generate by digitizing tax collection and improving enforcement, without raising tax rates.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Controls -->
+                <div class="bg-amber-50 rounded-xl p-8 border border-amber-100">
+                    <label for="efficiencyRange" class="block text-sm font-medium text-stone-700 mb-2">
+                        Target Tax Collection Efficiency (%)
+                    </label>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-stone-500 text-sm">Current: 62%</span>
+                        <input type="range" id="efficiencyRange" min="62" max="100" value="62" class="w-full h-2 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-amber-600">
+                        <span class="text-stone-500 text-sm">100%</span>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span id="efficiencyDisplay" class="text-4xl font-bold text-amber-700">62%</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-4 italic">
+                        *Moving from manual ledger to digital payments typically increases efficiency by 15-20%.
+                    </p>
+                </div>
+
+                <!-- Results -->
+                <div class="bg-white rounded-xl p-8 border border-stone-200 text-center space-y-6">
+                    <div>
+                        <p class="text-sm text-stone-500 uppercase tracking-wide">Projected Own Source Revenue</p>
+                        <h3 id="projectedRevenue" class="text-3xl font-bold text-stone-800">৳ 8.20 Cr</h3>
+                    </div>
+                    <div class="w-full h-px bg-stone-100"></div>
+                    <div>
+                        <p class="text-sm text-green-600 font-bold uppercase tracking-wide">Potential Surplus Funds</p>
+                        <h3 id="surplusFunds" class="text-4xl font-extrabold text-green-600">+ ৳ 0.00 Cr</h3>
+                        <p class="text-xs text-stone-400 mt-2">Available for new projects</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contextual Graphic -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="bg-white p-4 rounded-lg border border-stone-100 text-center">
+                    <div class="text-2xl mb-2">🛣️</div>
+                    <div class="text-sm font-bold">New Roads</div>
+                    <div class="text-xs text-stone-500" id="impactRoads">0 km</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-stone-100 text-center">
+                    <div class="text-2xl mb-2">💡</div>
+                    <div class="text-sm font-bold">Street Lights</div>
+                    <div class="text-xs text-stone-500" id="impactLights">0 units</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-stone-100 text-center">
+                    <div class="text-2xl mb-2">🗑️</div>
+                    <div class="text-sm font-bold">Waste Bins</div>
+                    <div class="text-xs text-stone-500" id="impactBins">0 units</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: STRATEGIC PLAN -->
+        <section id="section-strategy" class="hidden animate-fade-in space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-2">Revamp & Rebuild Strategy</h2>
+                <p class="text-stone-600 leading-relaxed">
+                    Based on the financial analysis, here is the recommended roadmap for the Jhalakathi Municipality revamp project. 
+                    These action items prioritize financial sustainability and visible infrastructure impact.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Strategy Card 1 -->
+                <div class="bg-white p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                    <h3 class="text-lg font-bold text-stone-800 flex items-center">
+                        <span class="bg-amber-100 text-amber-600 p-1 rounded mr-2 text-sm">Priority 1</span>
+                        Revenue Automation
+                    </h3>
+                    <p class="text-stone-600 mt-3 text-sm leading-relaxed">
+                        <strong>Observation:</strong> Holding tax collection is currently manual and inefficient (62%).
+                        <br><strong>Action:</strong> Implement a GIS-based holding assessment and online payment gateway.
+                        <br><strong>Goal:</strong> Increase Own Source Revenue by 25% within 2 years.
+                    </p>
+                </div>
+
+                <!-- Strategy Card 2 -->
+                <div class="bg-white p-6 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                    <h3 class="text-lg font-bold text-stone-800 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 p-1 rounded mr-2 text-sm">Priority 2</span>
+                        Expenditure Optimization
+                    </h3>
+                    <p class="text-stone-600 mt-3 text-sm leading-relaxed">
+                        <strong>Observation:</strong> Administrative costs consume 25% of the budget.
+                        <br><strong>Action:</strong> Audit non-essential posts and digitize file management to reduce overhead.
+                        <br><strong>Goal:</strong> Cap establishment costs at 20%, redirecting 5% to sanitation.
+                    </p>
+                </div>
+
+                <!-- Strategy Card 3 -->
+                <div class="bg-white p-6 rounded-xl border-l-4 border-green-500 shadow-sm">
+                    <h3 class="text-lg font-bold text-stone-800 flex items-center">
+                        <span class="bg-green-100 text-green-600 p-1 rounded mr-2 text-sm">Priority 3</span>
+                        Market Asset Management
+                    </h3>
+                    <p class="text-stone-600 mt-3 text-sm leading-relaxed">
+                        <strong>Observation:</strong> Market rents yield only 6.1% revenue despite prime locations.
+                        <br><strong>Action:</strong> Re-evaluate lease agreements based on current market rates.
+                        <br><strong>Goal:</strong> Double market revenue to 12% of total income.
+                    </p>
+                </div>
+
+                <!-- Strategy Card 4 -->
+                <div class="bg-white p-6 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                    <h3 class="text-lg font-bold text-stone-800 flex items-center">
+                        <span class="bg-purple-100 text-purple-600 p-1 rounded mr-2 text-sm">Priority 4</span>
+                        Public-Private Partnership (PPP)
+                    </h3>
+                    <p class="text-stone-600 mt-3 text-sm leading-relaxed">
+                        <strong>Observation:</strong> Waste management is underfunded (4%).
+                        <br><strong>Action:</strong> Outsource waste collection to private contractors with user fees.
+                        <br><strong>Goal:</strong> Improve city cleanliness without increasing municipal headcount.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-400 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">Jhalakathi Municipality Revamp Project | Data Simulation for Planning Purposes</p>
+            <p class="text-xs mt-2 text-stone-500">Generated for Research & Analysis</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- State Management ---
+        const appState = {
+            currentView: 'overview',
+            baseRevenue: 8.2, // in Crores
+            currentEfficiency: 62, // percentage
+            totalHoldingAssessment: 13.22, // Theoretical max if 100% efficient (8.2 / 0.62)
+        };
+
+        // --- Data Definitions (Mock Data based on standard Municipal profiles) ---
+        const chartData = {
+            history: {
+                years: ['2020', '2021', '2022', '2023', '2024'],
+                income: [35.2, 38.5, 42.1, 48.0, 52.4],
+                expense: [34.8, 39.0, 41.5, 47.2, 51.8]
+            },
+            incomeBreakdown: {
+                labels: ['Holding Tax', 'Trade License', 'Market Rents', 'Water Bill', 'Govt Grants (ADP)', 'Projects', 'Others'],
+                data: [12, 5, 6, 3, 55, 15, 4], // Percentages
+                colors: ['#D97706', '#F59E0B', '#FBBF24', '#3B82F6', '#10B981', '#059669', '#94A3B8']
+            },
+            expenseBreakdown: {
+                labels: ['Establishment (Salary)', 'Road/Infrastructure', 'Drainage', 'Sanitation', 'Street Light', 'Education/Health', 'Others'],
+                data: [25, 40, 15, 8, 5, 3, 4], // Percentages
+                colors: ['#EF4444', '#64748B', '#475569', '#10B981', '#F59E0B', '#3B82F6', '#CBD5E1']
+            }
+        };
+
+        // --- Navigation Logic ---
+        function navigateTo(viewId) {
+            // Update State
+            appState.currentView = viewId;
+
+            // Update UI: Hide all sections, show target
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`section-${viewId}`).classList.remove('hidden');
+
+            // Update Tabs Styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active', 'text-amber-600');
+                btn.classList.add('text-stone-500');
+            });
+            const activeBtn = document.getElementById(`nav-${viewId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('nav-active', 'text-amber-600');
+                activeBtn.classList.remove('text-stone-500');
+            }
+
+            // Trigger Chart Resize/Updates if entering analysis view
+            if(viewId === 'analysis') {
+                if(window.incomeChartInstance) window.incomeChartInstance.resize();
+                if(window.expenseChartInstance) window.expenseChartInstance.resize();
+            }
+        }
+
+        // --- Chart Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            initSimulator();
+        });
+
+        function initCharts() {
+            // 1. History Chart
+            const ctxHistory = document.getElementById('historyChart').getContext('2d');
+            new Chart(ctxHistory, {
+                type: 'bar',
+                data: {
+                    labels: chartData.history.years,
+                    datasets: [
+                        {
+                            label: 'Total Income (Cr)',
+                            data: chartData.history.income,
+                            backgroundColor: '#10B981',
+                            borderRadius: 4,
+                            order: 2
+                        },
+                        {
+                            label: 'Total Expenditure (Cr)',
+                            data: chartData.history.expense,
+                            backgroundColor: '#EF4444',
+                            borderRadius: 4,
+                            order: 3
+                        },
+                        {
+                            label: 'Growth Trend',
+                            data: chartData.history.income,
+                            type: 'line',
+                            borderColor: '#334155',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#F1F5F9' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Income Chart (Doughnut)
+            const ctxIncome = document.getElementById('incomeChart').getContext('2d');
+            window.incomeChartInstance = new Chart(ctxIncome, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.incomeBreakdown.labels,
+                    datasets: [{
+                        data: chartData.incomeBreakdown.data,
+                        backgroundColor: chartData.incomeBreakdown.colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: {size: 11} } }
+                    }
+                }
+            });
+
+            // 3. Expense Chart (Pie)
+            const ctxExpense = document.getElementById('expenseChart').getContext('2d');
+            window.expenseChartInstance = new Chart(ctxExpense, {
+                type: 'pie',
+                data: {
+                    labels: chartData.expenseBreakdown.labels,
+                    datasets: [{
+                        data: chartData.expenseBreakdown.data,
+                        backgroundColor: chartData.expenseBreakdown.colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: {size: 11} } }
+                    }
+                }
+            });
+        }
+
+        // --- Simulator Logic ---
+        function initSimulator() {
+            const slider = document.getElementById('efficiencyRange');
+            const display = document.getElementById('efficiencyDisplay');
+            const revDisplay = document.getElementById('projectedRevenue');
+            const surplusDisplay = document.getElementById('surplusFunds');
+            
+            // Impact Elements
+            const impRoads = document.getElementById('impactRoads');
+            const impLights = document.getElementById('impactLights');
+            const impBins = document.getElementById('impactBins');
+
+            slider.addEventListener('input', (e) => {
+                const efficiency = parseInt(e.target.value);
+                display.innerText = efficiency + '%';
+
+                // Calculate projections
+                // Logic: Base Revenue (8.2Cr) was at 62%. 
+                // Potential Total = 8.2 / 0.62 = 13.22 Cr
+                // New Revenue = Potential Total * New Efficiency
+                
+                const potentialTotal = appState.baseRevenue / 0.62;
+                const newRevenue = potentialTotal * (efficiency / 100);
+                const surplus = newRevenue - appState.baseRevenue;
+
+                // Update UI
+                revDisplay.innerText = '৳ ' + newRevenue.toFixed(2) + ' Cr';
+                surplusDisplay.innerText = '+ ৳ ' + surplus.toFixed(2) + ' Cr';
+
+                // Update Impacts (Mock cost factors)
+                // 1km road = ~0.8 Cr, 1 Light = ~0.0005 Cr, 1 Bin = ~0.0001 Cr
+                // Distribute surplus: 60% Roads, 20% Lights, 20% Bins
+                
+                if (surplus > 0) {
+                    const roadMoney = surplus * 0.6;
+                    const lightMoney = surplus * 0.2;
+                    const binMoney = surplus * 0.2;
+
+                    impRoads.innerText = '~' + (roadMoney / 0.8).toFixed(1) + ' km';
+                    impLights.innerText = '~' + Math.floor(lightMoney / 0.0005) + ' units';
+                    impBins.innerText = '~' + Math.floor(binMoney / 0.0001) + ' units';
+                    
+                    surplusDisplay.classList.remove('text-stone-400');
+                    surplusDisplay.classList.add('text-green-600');
+                } else {
+                    impRoads.innerText = '0 km';
+                    impLights.innerText = '0 units';
+                    impBins.innerText = '0 units';
+                    surplusDisplay.classList.remove('text-green-600');
+                    surplusDisplay.classList.add('text-stone-400');
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
