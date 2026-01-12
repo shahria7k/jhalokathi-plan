@@ -7,6 +7,19 @@ function toggleLanguage() {
     localStorage.setItem('preferredLanguage', currentLanguage);
 }
 
+// Ensure default is Bangla on first load (ignore saved preference if it's English)
+function initializeLanguage() {
+    const savedLang = localStorage.getItem('preferredLanguage');
+    // Only use saved language if it exists, otherwise default to Bangla
+    if (savedLang && (savedLang === 'bn' || savedLang === 'en')) {
+        currentLanguage = savedLang;
+    } else {
+        currentLanguage = 'bn'; // Force Bangla as default
+        localStorage.setItem('preferredLanguage', 'bn');
+    }
+    updateLanguage();
+}
+
 function updateLanguage() {
     // Update language toggle button text
     const langTexts = document.querySelectorAll('#lang-text, #lang-text-desktop');
@@ -80,9 +93,5 @@ function updateTranslatableContent() {
 
 // Initialize language on page load
 document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferredLanguage');
-    if (savedLang) {
-        currentLanguage = savedLang;
-    }
-    updateLanguage();
+    initializeLanguage();
 });
